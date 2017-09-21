@@ -56,23 +56,25 @@ public class MainFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         GetDataFromJson ob = new GetDataFromJson();
-        mList = ob.doInBackground();
-
-//            mAdapter = new RecyclerAdapterRecips(mList, getContext());
-//            mRecyclerView.setAdapter(mAdapter);
-
-
+        ob.execute();
 
 
         return v;
     }
 
 
-    private class GetDataFromJson extends AsyncTask<Object, Object, List<Recips>> {
+    private class GetDataFromJson extends AsyncTask<Void, Void, List<Recips>> {
 
 
         @Override
-        protected List<Recips> doInBackground(Object... params) {
+        protected void onPostExecute(List<Recips> recipses) {
+            mAdapter = new RecyclerAdapterRecips(mList, getContext());
+            mRecyclerView.setAdapter(mAdapter);
+            super.onPostExecute(mList);
+        }
+
+        @Override
+        protected List<Recips> doInBackground(Void... params) {
 
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
@@ -82,13 +84,7 @@ public class MainFragment extends Fragment {
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-                try {
-                    urlConnection.connect();
-
-                }catch (Exception ex){
-                    String y=ex.toString();
-
-                }
+                urlConnection.connect();
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
@@ -116,7 +112,9 @@ public class MainFragment extends Fragment {
 
                 } catch (Exception ex) {
 
+                    String e=ex.toString();
                     Log.e(ex.toString(), "Error while handel Json ", ex);
+
 
                 }
 
