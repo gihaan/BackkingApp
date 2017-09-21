@@ -9,7 +9,7 @@ public class RecipsSteps {
 
 
 
-    private String stepID;
+    private int stepID;
     private String shortDescrptionOfStep;
     private String fullDescrptionOfStep;
     private String videoUrl;
@@ -18,7 +18,7 @@ public class RecipsSteps {
     public RecipsSteps(){
 
     }
-    public RecipsSteps(String stepID, String shortDescrptionOfStep, String fullDescrptionOfStep, String videoUrl, String thumpUrl) {
+    public RecipsSteps(int stepID, String shortDescrptionOfStep, String fullDescrptionOfStep, String videoUrl, String thumpUrl) {
         this.stepID = stepID;
         this.shortDescrptionOfStep = shortDescrptionOfStep;
         this.fullDescrptionOfStep = fullDescrptionOfStep;
@@ -26,11 +26,11 @@ public class RecipsSteps {
         this.thumpUrl = thumpUrl;
     }
 
-    public String getStepID() {
+    public int getStepID() {
         return stepID;
     }
 
-    public void setStepID(String stepID) {
+    public void setStepID(int stepID) {
         this.stepID = stepID;
     }
 

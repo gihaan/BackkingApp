@@ -119,7 +119,7 @@ public class MainFragment extends Fragment {
                 }
 
             } catch (IOException e) {
-                Log.e(e.toString(), "movie json string ", e);
+                Log.e(e.toString(), "recips json string ", e);
                 // If the code didn't successfully get the weather data
                 String x = e.getMessage().toString();
                 recipJsonSt = null;
@@ -164,62 +164,72 @@ public class MainFragment extends Fragment {
             final String MEAURE = "measure";
             final String INGERDIANT = "ingredient";
 
-            JSONObject recipJson = new JSONObject(recipsJsonSt);
-            JSONArray recipsArray = recipJson.getJSONArray("");
+            try {
+
+                JSONObject recipJson = new JSONObject(recipsJsonSt);
+                JSONArray recipsArray = recipJson.getJSONArray("");
 
 
-            //---------------RECIPS----------------------
+                //---------------RECIPS----------------------
 
-            for (int i = 0; i < recipsArray.length(); i++) {
+                for (int i = 0; i < recipsArray.length(); i++) {
 
-                JSONObject rec = recipsArray.getJSONObject(i);
-                Recips recips = new Recips();
-                recips.setRecipsID(rec.getString(RECIP_ID));
-                recips.setRecipsName(rec.getString(NAME));
-
-
-                //---------------INGERDIANT----------------------
-                JSONObject recipIngerdiantJson = new JSONObject(recipsJsonSt);
-                JSONArray recipIngerdiantsArray = recipJson.getJSONArray("ingredients");
-                for (int k = 0; k < recipIngerdiantsArray.length(); k++) {
+                    JSONObject rec = recipsArray.getJSONObject(i);
+                    Recips recips = new Recips();
+                    recips.setRecipsID(rec.getInt(RECIP_ID));
+                    recips.setRecipsName(rec.getString(NAME));
 
 
-                    RecipsIngerdiant ob = new RecipsIngerdiant();
-                    JSONObject recipIntegr = recipIngerdiantsArray.getJSONObject(k);
+                    //---------------INGERDIANT----------------------
+                    // JSONObject recipIngerdiantJson = new JSONObject(recipsJsonSt);
+                    JSONArray recipIngerdiantsArray = recipJson.getJSONArray("ingredients");
+                    for (int k = 0; k < recipIngerdiantsArray.length(); k++) {
 
-                    ob.setIngerdiantName(recipIntegr.getString(INGERDIANT));
-                    ob.setMeaureOfIngerdiant(recipIntegr.getString(MEAURE));
-                    ob.setIngrediantQuality(recipIntegr.getString(QUANTITY));
 
-                    ingerdiant.add(ob);
+                        RecipsIngerdiant ob = new RecipsIngerdiant();
+                        JSONObject recipIntegr = recipIngerdiantsArray.getJSONObject(k);
 
+                        ob.setIngrediantQuality(recipIntegr.getDouble(QUANTITY));
+                        ob.setMeaureOfIngerdiant(recipIntegr.getString(MEAURE));
+                        ob.setIngerdiantName(recipIntegr.getString(INGERDIANT));
+
+                        ingerdiant.add(ob);
+
+                    }
+
+                    //---------------STEPS----------------------
+
+                    //JSONObject recipStepstJson = new JSONObject(recipsJsonSt);
+                    JSONArray recipStepsArray = recipJson.getJSONArray("steps");
+                    for (int j = 0; j < recipIngerdiantsArray.length(); j++) {
+
+
+                        RecipsSteps object = new RecipsSteps();
+                        JSONObject recipStep = recipIngerdiantsArray.getJSONObject(j);
+
+                        object.setStepID(recipStep.getInt(RECIP_ID));
+                        object.setShortDescrptionOfStep(recipStep.getString(SHORT_DESCRPTION));
+
+                        object.setFullDescrptionOfStep(recipStep.getString(DESCRPTION));
+                        object.setVideoUrl(recipStep.getString(VIDEO_URL));
+                        object.setThumpUrl(recipStep.getString(THUMP_NAIL_URL));
+
+                        steps.add(object);
+                    }
+
+
+                    recips.setRecipsIngerdiant(ingerdiant);
+                    recips.setRecipsSteps(steps);
+
+                    mList.add(recips);
                 }
 
-                //---------------STEPS----------------------
+            }catch (Exception e){
+                String x=e.toString();
 
-                JSONObject recipStepstJson = new JSONObject(recipsJsonSt);
-                JSONArray recipStepsArray = recipJson.getJSONArray("steps");
-                for (int j = 0; j < recipIngerdiantsArray.length(); j++) {
-
-
-                    RecipsSteps object = new RecipsSteps();
-                    JSONObject recipStep = recipIngerdiantsArray.getJSONObject(j);
-
-                    object.setFullDescrptionOfStep(recipStep.getString(DESCRPTION));
-                    object.setShortDescrptionOfStep(recipStep.getString(SHORT_DESCRPTION));
-                    object.setVideoUrl(recipStep.getString(VIDEO_URL));
-                    object.setThumpUrl(recipStep.getString(THUMP_NAIL_URL));
-                    object.setStepID(recipStep.getString(RECIP_ID));
-
-                    steps.add(object);
-                }
-
-
-                recips.setRecipsIngerdiant(ingerdiant);
-                recips.setRecipsSteps(steps);
-
-                mList.add(recips);
             }
+
+
 
             return mList;
         }

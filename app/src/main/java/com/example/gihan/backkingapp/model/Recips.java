@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Recips {
 
-    private String recipsID;
+    private int recipsID;
     private String recipsName;
     private List<RecipsIngerdiant>recipsIngerdiant;
     private List<RecipsSteps>recipsSteps;
@@ -16,18 +16,18 @@ public class Recips {
     public Recips() {
     }
 
-    public Recips(String recipsID, String recipsName, List<RecipsIngerdiant> recipsIngerdiant, List<RecipsSteps> recipsSteps) {
+    public Recips(int recipsID, String recipsName, List<RecipsIngerdiant> recipsIngerdiant, List<RecipsSteps> recipsSteps) {
         this.recipsID = recipsID;
         this.recipsName = recipsName;
         this.recipsIngerdiant = recipsIngerdiant;
         this.recipsSteps = recipsSteps;
     }
 
-    public String getRecipsID() {
+    public int getRecipsID() {
         return recipsID;
     }
 
-    public void setRecipsID(String recipsID) {
+    public void setRecipsID(int recipsID) {
         this.recipsID = recipsID;
     }
 

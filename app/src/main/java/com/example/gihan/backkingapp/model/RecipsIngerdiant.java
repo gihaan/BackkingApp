@@ -8,24 +8,24 @@ public class RecipsIngerdiant {
 
 
 
-    private String ingrediantQuality;
+    private Double ingrediantQuality;
     private String meaureOfIngerdiant;
     private String ingerdiantName;
 
     public RecipsIngerdiant() {
     }
 
-    public RecipsIngerdiant(String ingrediantQuality, String meaureOfIngerdiant, String ingerdiantName) {
+    public RecipsIngerdiant(Double ingrediantQuality, String meaureOfIngerdiant, String ingerdiantName) {
         this.ingrediantQuality = ingrediantQuality;
         this.meaureOfIngerdiant = meaureOfIngerdiant;
         this.ingerdiantName = ingerdiantName;
     }
 
-    public String getIngrediantQuality() {
+    public Double getIngrediantQuality() {
         return ingrediantQuality;
     }
 
-    public void setIngrediantQuality(String ingrediantQuality) {
+    public void setIngrediantQuality(Double ingrediantQuality) {
         this.ingrediantQuality = ingrediantQuality;
     }
 
