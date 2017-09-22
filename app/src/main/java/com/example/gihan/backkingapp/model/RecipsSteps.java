@@ -1,10 +1,12 @@
 package com.example.gihan.backkingapp.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Gihan on 9/20/2017.
  */
 
-public class RecipsSteps {
+public class RecipsSteps implements Serializable{
 
 
 

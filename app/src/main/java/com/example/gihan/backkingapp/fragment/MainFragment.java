@@ -10,9 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.example.gihan.backkingapp.adapter.RecyclerAdapterRecips;
+import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsIngerdiant;
 import com.example.gihan.backkingapp.model.RecipsSteps;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,10 +38,10 @@ public class MainFragment extends Fragment {
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerAdapterRecips mAdapter;
-    List<Recips> mList;
-    List<RecipsIngerdiant> ingerdiant;
-    List<RecipsSteps> steps;
+    private RecyclerAdapterItems mAdapter;
+    List<Recips> mList=new ArrayList<>();
+    List<RecipsIngerdiant> ingerdiant=new ArrayList<>();
+    List<RecipsSteps> steps=new ArrayList<>();
 
 
     @Override
@@ -63,12 +65,13 @@ public class MainFragment extends Fragment {
     }
 
 
+
     private class GetDataFromJson extends AsyncTask<Void, Void, List<Recips>> {
 
 
         @Override
         protected void onPostExecute(List<Recips> recipses) {
-            mAdapter = new RecyclerAdapterRecips(mList, getContext());
+            mAdapter = new RecyclerAdapterItems(mList, getContext());
             mRecyclerView.setAdapter(mAdapter);
             super.onPostExecute(mList);
         }
@@ -166,8 +169,8 @@ public class MainFragment extends Fragment {
 
             try {
 
-                JSONObject recipJson = new JSONObject(recipsJsonSt);
-                JSONArray recipsArray = recipJson.getJSONArray("");
+              //  JSONObject recipJson = new JSONObject(recipsJsonSt);
+                JSONArray recipsArray = new JSONArray(recipsJsonSt);
 
 
                 //---------------RECIPS----------------------
@@ -175,6 +178,7 @@ public class MainFragment extends Fragment {
                 for (int i = 0; i < recipsArray.length(); i++) {
 
                     JSONObject rec = recipsArray.getJSONObject(i);
+
                     Recips recips = new Recips();
                     recips.setRecipsID(rec.getInt(RECIP_ID));
                     recips.setRecipsName(rec.getString(NAME));
@@ -182,7 +186,7 @@ public class MainFragment extends Fragment {
 
                     //---------------INGERDIANT----------------------
                     // JSONObject recipIngerdiantJson = new JSONObject(recipsJsonSt);
-                    JSONArray recipIngerdiantsArray = recipJson.getJSONArray("ingredients");
+                    JSONArray recipIngerdiantsArray = rec.getJSONArray("ingredients");
                     for (int k = 0; k < recipIngerdiantsArray.length(); k++) {
 
 
@@ -199,17 +203,14 @@ public class MainFragment extends Fragment {
 
                     //---------------STEPS----------------------
 
-                    //JSONObject recipStepstJson = new JSONObject(recipsJsonSt);
-                    JSONArray recipStepsArray = recipJson.getJSONArray("steps");
-                    for (int j = 0; j < recipIngerdiantsArray.length(); j++) {
-
-
+                    JSONArray recipStepsArray =rec.getJSONArray("steps");
+                    for (int j = 0; j < recipStepsArray.length(); j++) {
                         RecipsSteps object = new RecipsSteps();
-                        JSONObject recipStep = recipIngerdiantsArray.getJSONObject(j);
+
+                        JSONObject recipStep = recipStepsArray.getJSONObject(j);
 
                         object.setStepID(recipStep.getInt(RECIP_ID));
                         object.setShortDescrptionOfStep(recipStep.getString(SHORT_DESCRPTION));
-
                         object.setFullDescrptionOfStep(recipStep.getString(DESCRPTION));
                         object.setVideoUrl(recipStep.getString(VIDEO_URL));
                         object.setThumpUrl(recipStep.getString(THUMP_NAIL_URL));
