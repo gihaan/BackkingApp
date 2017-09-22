@@ -1,6 +1,7 @@
 package com.example.gihan.backkingapp.fragment;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsIngerdiant;
@@ -27,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,9 +42,9 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerAdapterItems mAdapter;
-    List<Recips> mList=new ArrayList<>();
-    List<RecipsIngerdiant> ingerdiant=new ArrayList<>();
-    List<RecipsSteps> steps=new ArrayList<>();
+    List<Recips> mList = new ArrayList<>();
+    List<RecipsIngerdiant> ingerdiant = new ArrayList<>();
+    List<RecipsSteps> steps = new ArrayList<>();
 
 
     @Override
@@ -61,9 +64,10 @@ public class MainFragment extends Fragment {
         ob.execute();
 
 
-        return v;
-    }
 
+
+           return v;
+    }
 
 
     private class GetDataFromJson extends AsyncTask<Void, Void, List<Recips>> {
@@ -73,6 +77,21 @@ public class MainFragment extends Fragment {
         protected void onPostExecute(List<Recips> recipses) {
             mAdapter = new RecyclerAdapterItems(mList, getContext());
             mRecyclerView.setAdapter(mAdapter);
+
+            mAdapter.setOnItemClickListener(new RecyclerAdapterItems.OnItemClickListener() {
+                @Override
+                public void onItemClick(View itemView, int position) {
+                    Toast.makeText(getContext(),  " was clicked!", Toast.LENGTH_SHORT).show();
+
+                    Recips r = mList.get(position);
+                    Intent i = new Intent(getContext(), RecipsDetail.class);
+                    i.putExtra("recip", (Serializable) r);
+                    startActivity(i);
+
+
+                }
+            });
+
             super.onPostExecute(mList);
         }
 
@@ -115,7 +134,7 @@ public class MainFragment extends Fragment {
 
                 } catch (Exception ex) {
 
-                    String e=ex.toString();
+                    String e = ex.toString();
                     Log.e(ex.toString(), "Error while handel Json ", ex);
 
 
@@ -169,7 +188,7 @@ public class MainFragment extends Fragment {
 
             try {
 
-              //  JSONObject recipJson = new JSONObject(recipsJsonSt);
+                //  JSONObject recipJson = new JSONObject(recipsJsonSt);
                 JSONArray recipsArray = new JSONArray(recipsJsonSt);
 
 
@@ -203,7 +222,7 @@ public class MainFragment extends Fragment {
 
                     //---------------STEPS----------------------
 
-                    JSONArray recipStepsArray =rec.getJSONArray("steps");
+                    JSONArray recipStepsArray = rec.getJSONArray("steps");
                     for (int j = 0; j < recipStepsArray.length(); j++) {
                         RecipsSteps object = new RecipsSteps();
 
@@ -225,11 +244,10 @@ public class MainFragment extends Fragment {
                     mList.add(recips);
                 }
 
-            }catch (Exception e){
-                String x=e.toString();
+            } catch (Exception e) {
+                String x = e.toString();
 
             }
-
 
 
             return mList;

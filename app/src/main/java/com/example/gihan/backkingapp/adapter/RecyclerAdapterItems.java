@@ -24,51 +24,31 @@ import java.util.List;
 
 public class RecyclerAdapterItems extends RecyclerView.Adapter<RecyclerAdapterItems.RecyclerviewHolder> {
 
-    private List<Recips> mList=new ArrayList<Recips>();
-     Context ctx;
+    private List<Recips> mList = new ArrayList<Recips>();
+    Context ctx;
 
-    public RecyclerAdapterItems(List<Recips>mList, Context ctx){
-        this.ctx=ctx;
-       this.mList=mList;
+    public RecyclerAdapterItems(List<Recips> mList, Context ctx) {
+        this.ctx = ctx;
+        this.mList = mList;
     }
 
     @Override
     public RecyclerviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_row,parent,false);
-        RecyclerviewHolder holder=new RecyclerviewHolder(v,ctx,mList);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_row, parent, false);
+        RecyclerviewHolder holder = new RecyclerviewHolder(v, ctx, mList);
 
         return holder;
     }
 
+
     @Override
     public void onBindViewHolder(final RecyclerviewHolder holder, final int position) {
 
-        Recips object=mList.get(position);
+        Recips object = mList.get(position);
         holder.mRecipNmae.setText(mList.get(position).getRecipsName());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Recips r=mList.get(position);
-                Intent i=new Intent(v.getContext(), RecipsDetail.class);
-                i.putExtra("recip", (Serializable) r);
-
-
-                try {
-                   holder.ctx.startActivity(i);
-
-
-                }catch (Exception e){
-                    String ss=e.toString();
-                }
-
-
-            }
-        });
-    }
-
-
+           }
 
     @Override
     public int getItemCount() {
@@ -76,21 +56,48 @@ public class RecyclerAdapterItems extends RecyclerView.Adapter<RecyclerAdapterIt
     }
 
 
+    /***** ------------------------Creating OnItemClickListener -----------------------*****/
+    // Define listener member variable
+    public static  OnItemClickListener listener;
+
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+    //----------------------------------------------------------------------
+
+
+
     public static class RecyclerviewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mRecipNmae;
-
-        private List<Recips> mList=new ArrayList<>();
+       private TextView mRecipNmae;
+        private List<Recips> mList = new ArrayList<>();
         private Context ctx;
 
-
-        public RecyclerviewHolder(View view,Context ctx,List<Recips> mList){
+        public RecyclerviewHolder(View view, Context ctx, List<Recips> mList) {
             super(view);
-            this.ctx=ctx;
-            this.mList=mList;
+            this.ctx = ctx;
 
+            mRecipNmae = (TextView) view.findViewById(R.id.recip_name);
 
-           mRecipNmae=(TextView)view.findViewById(R.id.recip_name);
+            // Setup the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
 
 
 

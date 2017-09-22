@@ -1,6 +1,7 @@
 package com.example.gihan.backkingapp.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.gihan.backkingapp.R;
+import com.example.gihan.backkingapp.activity.RecipsDetail;
+import com.example.gihan.backkingapp.activity.StepDetail;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterGrdiant;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterRecipsDetail;
@@ -19,6 +23,7 @@ import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsIngerdiant;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +83,20 @@ public class RecipsDetailFragment extends Fragment {
         mRecyclerViewGrdiant.setAdapter(mGrdiantAdapter);
 
 
+
+        mItemAdapter.setOnItemClickListener(new RecyclerAdapterRecipsDetail.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Toast.makeText(getContext(),  " was clicked!", Toast.LENGTH_SHORT).show();
+
+                RecipsSteps r = mSteps.get(position);
+                Intent i = new Intent(getContext(), StepDetail.class);
+                i.putExtra("recip", (Serializable) r);
+                startActivity(i);
+
+
+            }
+        });
 
 
 

@@ -53,6 +53,21 @@ public class  RecyclerAdapterRecipsDetail extends RecyclerView.Adapter< Recycler
         return mList.size();
     }
 
+    /***** ------------------------Creating OnItemClickListener -----------------------*****/
+    // Define listener member variable
+    public static RecyclerAdapterRecipsDetail.OnItemClickListener listener;
+
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(RecyclerAdapterRecipsDetail.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+    //----------------------------------------------------------------------
+
 
     public static class RecyclerviewHolder extends RecyclerView.ViewHolder {
 
@@ -69,6 +84,20 @@ public class  RecyclerAdapterRecipsDetail extends RecyclerView.Adapter< Recycler
 
 
             mItempNmae=(TextView)view.findViewById(R.id.step_item_short_desc);
+
+            // Setup the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
 
 
 
