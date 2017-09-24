@@ -3,6 +3,7 @@ package com.example.gihan.backkingapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,10 +90,13 @@ public class RecipsDetailFragment extends Fragment {
             public void onItemClick(View itemView, int position) {
                 Toast.makeText(getContext(),  " was clicked!", Toast.LENGTH_SHORT).show();
 
-                RecipsSteps r = mSteps.get(position);
-                Intent i = new Intent(getContext(), StepDetail.class);
-                i.putExtra("recip", (Serializable) r);
-                startActivity(i);
+                Bundle b=new Bundle();
+                RecipsSteps ste= mSteps.get(position);
+                Intent itemDetail = new Intent(getContext(), StepDetail.class);
+                itemDetail.putExtra("item", (Serializable) ste);
+                itemDetail.putExtra("list", (Serializable) mSteps);
+
+                startActivity(itemDetail);
 
 
             }
