@@ -1,6 +1,7 @@
 package com.example.gihan.backkingapp.fragment;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -76,16 +78,23 @@ public class StepDetailFragment extends Fragment {
         mNext = (Button) v.findViewById(R.id.item_detail_btn_next);
         mPrevious = (Button) v.findViewById(R.id.item_detail_btn_previous);
         recipImage = (ImageView) v.findViewById(R.id.step_image);
-        simpleExoPlayerView= (SimpleExoPlayerView) v.findViewById(R.id.video_display);
-
-    if (object.getVideoUrl() != "") {
-        simpleExoPlayerView .setVisibility(View.VISIBLE);
+        simpleExoPlayerView = (SimpleExoPlayerView) v.findViewById(R.id.video_display);
 
 
-    } else {
-        simpleExoPlayerView .setVisibility(View.GONE);
-        recipImage.setVisibility(View.GONE);
-    }
+        //---------------------------------------------------------------------
+        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
+        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+        initializePlayer(Uri.parse(object.getVideoUrl()));
+
+        if (object.getVideoUrl() != "") {
+
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+
+
+        } else {
+            simpleExoPlayerView.setVisibility(View.GONE);
+            recipImage.setVisibility(View.GONE);
+        }
 
 
 //------------------------------------------------
@@ -120,6 +129,20 @@ public class StepDetailFragment extends Fragment {
                         Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
 
                     }
+
+                    ///////////////--------VIDEO ------------------
+                    initializePlayer(Uri.parse(recip.getVideoUrl()));
+                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
+                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+
+
+                    if (recip.getVideoUrl() != "") {
+                        simpleExoPlayerView.setVisibility(View.VISIBLE);
+                    } else {
+                        simpleExoPlayerView.setVisibility(View.GONE);
+                        recipImage.setVisibility(View.GONE);
+                    }
+                    //----------------------------------------------
                     cursor++;
                     if (cursor == mList.size()) {
                         cursor = 0;
@@ -146,7 +169,24 @@ public class StepDetailFragment extends Fragment {
                         imageUrl = recip.getThumpUrl();
                         Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
 
+
                     }
+
+
+                    ///////////////--------VIDEO ------------------
+                    initializePlayer(Uri.parse(recip.getVideoUrl()));
+                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
+                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+
+
+                    if (recip.getVideoUrl() != "") {
+                        simpleExoPlayerView.setVisibility(View.VISIBLE);
+                    } else {
+                        simpleExoPlayerView.setVisibility(View.GONE);
+                        recipImage.setVisibility(View.GONE);
+                    }
+                    //----------------------------------------------
+
                     cursor--;
                     if (cursor1 == -1) {
                         cursor1 = mList.size() - 1;
