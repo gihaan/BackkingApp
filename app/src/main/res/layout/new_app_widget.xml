@@ -1,7 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="@color/colorAccent"
     android:padding="@dimen/widget_margin">
 
     <GridView
@@ -11,10 +11,10 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        android:background="@color/colorPrimaryDark"
         android:textColor="#ffffff"
         android:textSize="24sp"
+        android:background="@color/colorPrimaryDark"
         android:numColumns="1"
         android:textStyle="bold|italic" />
 
-</RelativeLayout>
+</FrameLayout>

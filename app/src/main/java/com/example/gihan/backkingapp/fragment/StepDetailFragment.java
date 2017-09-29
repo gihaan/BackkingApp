@@ -94,7 +94,7 @@ public class StepDetailFragment extends Fragment {
             mNext.setVisibility(View.INVISIBLE);
             mPrevious.setVisibility(View.INVISIBLE);
             recipImage.setVisibility(View.INVISIBLE);
-            simpleExoPlayerView.setMinimumWidth(width);
+            simpleExoPlayerView.setMinimumWidth(height);
             simpleExoPlayerView.setMinimumHeight(width);
 
 
