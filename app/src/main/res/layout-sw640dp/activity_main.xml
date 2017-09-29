@@ -4,14 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.gihan.backkingapp.activity.RecipsDetail">
+    android:id="@+id/main_activity"
+    tools:context="com.example.gihan.backkingapp.activity.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/recips_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
-        ></FrameLayout>
 
 
 

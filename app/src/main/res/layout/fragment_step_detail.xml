@@ -6,9 +6,9 @@
     tools:context="com.example.gihan.backkingapp.fragment.StepDetailFragment">
 
 
-    <include
-        android:id="@+id/item_detail_toolbar"
-        layout="@layout/tool_bar_layout" />
+    <!--<include-->
+        <!--android:id="@+id/item_detail_toolbar"-->
+        <!--layout="@layout/tool_bar_layout" />-->
 
     <ImageView
         android:layout_width="match_parent"

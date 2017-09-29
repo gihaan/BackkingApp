@@ -20,6 +20,7 @@ import com.example.gihan.backkingapp.activity.StepDetail;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterGrdiant;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterRecipsDetail;
+import com.example.gihan.backkingapp.model.NameListener;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsIngerdiant;
 import com.example.gihan.backkingapp.model.RecipsSteps;
@@ -28,7 +29,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipsDetailFragment extends Fragment {
+public class RecipsDetailFragment extends Fragment  {
 
     Toolbar mToolbar;
     TextView mRecipsName;
@@ -44,6 +45,10 @@ public class RecipsDetailFragment extends Fragment {
     RecyclerAdapterRecipsDetail mItemAdapter;
 
 
+    private NameListener mListener;
+    public void setmNameListener(NameListener mNameListener){
+        this.mListener=mNameListener;
+    }
 
 
     @Override
@@ -90,13 +95,16 @@ public class RecipsDetailFragment extends Fragment {
             public void onItemClick(View itemView, int position) {
                 Toast.makeText(getContext(),  " was clicked!", Toast.LENGTH_SHORT).show();
 
-                Bundle b=new Bundle();
-                RecipsSteps ste= mSteps.get(position);
-                Intent itemDetail = new Intent(getContext(), StepDetail.class);
-                itemDetail.putExtra("item", (Serializable) ste);
-                itemDetail.putExtra("list", (Serializable) mSteps);
+                mListener.setSelectedStep(mSteps.get(position),mSteps);
 
-                startActivity(itemDetail);
+//                Bundle b=new Bundle();
+//                RecipsSteps ste= mSteps.get(position);
+//                Intent itemDetail = new Intent(getContext(), StepDetail.class);
+//                itemDetail.putExtra("item", (Serializable) ste);
+//
+//                itemDetail.putExtra("list", (Serializable) mSteps);
+//
+//                startActivity(itemDetail);
 
 
             }

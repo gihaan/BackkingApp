@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.gihan.backkingapp.activity.StepDetail">
+    tools:context="com.example.gihan.backkingapp.activity.RecipsDetail">
+
+    <FrameLayout
+        android:id="@+id/recips_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_weight=".5"
+        ></FrameLayout>
 
 
     <FrameLayout
@@ -13,6 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorAccent"
+        android:layout_weight=".5"
 
         ></FrameLayout>
+
 </LinearLayout>
