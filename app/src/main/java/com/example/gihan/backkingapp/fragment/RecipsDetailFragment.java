@@ -97,16 +97,6 @@ public class RecipsDetailFragment extends Fragment  {
 
                 mListener.setSelectedStep(mSteps.get(position),mSteps);
 
-//                Bundle b=new Bundle();
-//                RecipsSteps ste= mSteps.get(position);
-//                Intent itemDetail = new Intent(getContext(), StepDetail.class);
-//                itemDetail.putExtra("item", (Serializable) ste);
-//
-//                itemDetail.putExtra("list", (Serializable) mSteps);
-//
-//                startActivity(itemDetail);
-
-
             }
         });
 

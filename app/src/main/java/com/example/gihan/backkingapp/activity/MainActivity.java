@@ -8,15 +8,25 @@ import com.example.gihan.backkingapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static  int TABLET_MODE=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
+        if(null!=findViewById(R.id.main_activity_tablet)){
+            TABLET_MODE=1;
+
+        }
 
 
-        getSupportFragmentManager().beginTransaction().add(R.id.main_activity,new MainFragment()).commit();
+        if(TABLET_MODE==0){
+            getSupportFragmentManager().beginTransaction().add(R.id.main_activity,new MainFragment()).commit();
 
+        }else {
+            getSupportFragmentManager().beginTransaction().add(R.id.main_activity_tablet,new MainFragment()).commit();
+
+        }
     }
 }

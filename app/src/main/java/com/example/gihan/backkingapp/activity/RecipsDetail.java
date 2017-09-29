@@ -57,4 +57,6 @@ public class RecipsDetail extends AppCompatActivity implements NameListener{
 
         }
     }
+
+
 }
