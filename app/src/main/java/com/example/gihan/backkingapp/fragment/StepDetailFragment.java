@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,29 @@ public class StepDetailFragment extends Fragment {
         mPrevious = (Button) v.findViewById(R.id.item_detail_btn_previous);
         recipImage = (ImageView) v.findViewById(R.id.step_image);
         simpleExoPlayerView = (SimpleExoPlayerView) v.findViewById(R.id.video_display);
+
+
+
+        //----------------landscape---------
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        if(width>height){
+            mDescrption.setVisibility(View.INVISIBLE);
+            mNext.setVisibility(View.INVISIBLE);
+            mPrevious.setVisibility(View.INVISIBLE);
+            recipImage.setVisibility(View.INVISIBLE);
+            simpleExoPlayerView.setMinimumWidth(width);
+            simpleExoPlayerView.setMinimumHeight(width);
+
+
+
+
+
+        }
+
 
 
         //---------------------------------------------------------------------

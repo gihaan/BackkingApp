@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RecipsDetail" />
+
         <activity android:name=".activity.StepDetail" />
+
 
         <receiver android:name=".waidget.NewAppWidget">
             <intent-filter>
@@ -36,9 +38,10 @@
         </receiver>
 
 
-        <service android:name=".waidget.GridWidget"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
-        <service android:name=".waidget.BakkingAppService"/>
+        <service
+            android:name=".waidget.GridWidget"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".waidget.BakkingAppService" />
 
 
     </application>

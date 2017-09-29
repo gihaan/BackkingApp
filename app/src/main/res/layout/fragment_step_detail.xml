@@ -23,10 +23,12 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/video_display"
         android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_height="200dp">
+       >
+
 
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 

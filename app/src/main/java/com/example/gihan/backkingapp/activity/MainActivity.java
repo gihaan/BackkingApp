@@ -2,6 +2,7 @@ package com.example.gihan.backkingapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import com.example.gihan.backkingapp.fragment.MainFragment;
 import com.example.gihan.backkingapp.R;
@@ -13,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         if(null!=findViewById(R.id.main_activity_tablet)){
             TABLET_MODE=1;

@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.gihan.backkingapp.activity.MainActivity.TABLET_MODE;
+
 
 public class MainFragment extends Fragment {
 
@@ -56,13 +60,20 @@ public class MainFragment extends Fragment {
         mToolbar.setTitle("Baking Time");
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler);
-        mLayoutManager = new LinearLayoutManager(getContext());
+
+        if(TABLET_MODE==0){
+            mLayoutManager = new GridLayoutManager(getContext(),1);
+
+
+        }else {
+            mLayoutManager = new GridLayoutManager(getContext(),3);
+
+        }
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         GetDataFromJson ob = new GetDataFromJson();
         ob.execute();
-
 
 
 
