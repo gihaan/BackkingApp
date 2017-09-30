@@ -1,6 +1,8 @@
 package com.example.gihan.backkingapp.fragment;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
 import com.example.gihan.backkingapp.activity.StepDetail;
 import com.example.gihan.backkingapp.model.RecipsSteps;
@@ -73,7 +76,7 @@ public class StepDetailFragment extends Fragment {
         }
         mList.clear();
         mList = (List<RecipsSteps>) bundle.getSerializable("list");
-        final RecipsSteps object = (RecipsSteps) bundle.getSerializable("item");
+        RecipsSteps object = (RecipsSteps) bundle.getSerializable("item");
 
         mDescrption = (TextView) v.findViewById(R.id.item_detail_tv_fulldesc);
         mNext = (Button) v.findViewById(R.id.item_detail_btn_next);
@@ -89,7 +92,7 @@ public class StepDetailFragment extends Fragment {
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        if(width>height){
+        if(width>height) {
             mDescrption.setVisibility(View.INVISIBLE);
             mNext.setVisibility(View.INVISIBLE);
             mPrevious.setVisibility(View.INVISIBLE);
@@ -97,11 +100,45 @@ public class StepDetailFragment extends Fragment {
             simpleExoPlayerView.setMinimumWidth(height);
             simpleExoPlayerView.setMinimumHeight(width);
 
-
-
-
-
         }
+            /////////////SAVE DATA
+            try {
+
+
+                for (int j = 0; j < mList.size(); j++) {
+                    object = mList.get(j);
+
+                    ContentValues values = new ContentValues();
+
+                    values.put(RecipsProvider.RECIP_ID, j);
+                    values.put(RecipsProvider.STEP_ID, object.getStepID());
+                    values.put(RecipsProvider.SHORT_DESC, object.getShortDescrptionOfStep());
+                    values.put(RecipsProvider.FULL_DESC, object.getFullDescrptionOfStep());
+                    values.put(RecipsProvider.VIDEO_URL, object.getVideoUrl());
+                    values.put(RecipsProvider.THUMP_URL, object.getThumpUrl());
+
+
+                    //////////
+                    Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+                    int flag = 0;
+                    CR.moveToFirst();
+                    if (CR==null)
+
+                    while ((CR.moveToNext())) {
+                        if (object.getStepID() == CR.getInt(3)) {
+                            flag = 1;
+                        }
+                    }
+                    if (flag == 0) {
+
+                        Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
+                    }
+                }
+
+
+            } catch (Exception e) {
+                String uu = e.toString();
+            }
 
 
 

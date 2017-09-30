@@ -6,6 +6,8 @@
     \
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="com.android.example.wordlistsqlwithcontentprovider.PERMISSION" />
+
 
     <application
         android:allowBackup="true"
@@ -22,28 +24,29 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RecipsDetail" />
-
         <activity android:name=".activity.StepDetail" />
 
 
-        <receiver android:name=".waidget.NewAppWidget">
+        <service android:name=".Widget.igerdiantServies"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+
+        <receiver android:name=".Widget.RecipsWodgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
-
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/new_app_widget_info" />
+                android:resource="@xml/recips_wodget_provider_info" />
         </receiver>
 
 
-        <service
-            android:name=".waidget.GridWidget"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-        <service android:name=".waidget.BakkingAppService" />
-
-
+        <provider
+            android:name=".ContentProvider.RecipsProvider"
+            android:authorities="com.example.gihan.backkingapp.ContentProvider.RecipsProvider"
+            android:exported="true"
+            android:multiprocess="true" />
     </application>
 
 </manifest>

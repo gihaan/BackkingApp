@@ -1,14 +1,15 @@
 package com.example.gihan.backkingapp.fragment;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.model.Recips;
@@ -61,12 +63,12 @@ public class MainFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recycler);
 
-        if(TABLET_MODE==0){
-            mLayoutManager = new GridLayoutManager(getContext(),1);
+        if (TABLET_MODE == 0) {
+            mLayoutManager = new GridLayoutManager(getContext(), 1);
 
 
-        }else {
-            mLayoutManager = new GridLayoutManager(getContext(),3);
+        } else {
+            mLayoutManager = new GridLayoutManager(getContext(), 3);
 
         }
         mRecyclerView.setHasFixedSize(true);
@@ -76,8 +78,7 @@ public class MainFragment extends Fragment {
         ob.execute();
 
 
-
-           return v;
+        return v;
     }
 
 
@@ -92,7 +93,7 @@ public class MainFragment extends Fragment {
             mAdapter.setOnItemClickListener(new RecyclerAdapterItems.OnItemClickListener() {
                 @Override
                 public void onItemClick(View itemView, int position) {
-                    Toast.makeText(getContext(),  " was clicked!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), " was clicked!", Toast.LENGTH_SHORT).show();
 
                     Recips r = mList.get(position);
                     Intent i = new Intent(getContext(), RecipsDetail.class);

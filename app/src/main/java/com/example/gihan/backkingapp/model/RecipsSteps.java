@@ -8,9 +8,6 @@ import java.io.Serializable;
 
 public class RecipsSteps implements Serializable{
 
-
-
-
     private int stepID;
     private String shortDescrptionOfStep;
     private String fullDescrptionOfStep;
