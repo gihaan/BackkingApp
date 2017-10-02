@@ -15,32 +15,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
-import com.example.gihan.backkingapp.activity.StepDetail;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,17 +42,17 @@ public class StepDetailFragment extends Fragment {
 
     TextView mDescrption;
     Button mNext;
-    Button mPrevious;
     ImageView recipImage;
     SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
+    private RecipsSteps recip;
 
     LoadControl loadControl;
 
-    List<RecipsSteps> mList = new ArrayList<>();
+    List<RecipsSteps> mList ;
     int flag;
     int cursor;
-    int cursor1;
+
     String imageUrl;
 
 
@@ -74,105 +65,38 @@ public class StepDetailFragment extends Fragment {
         if (bundle == null) {
             bundle = getActivity().getIntent().getExtras();
         }
-        mList.clear();
         mList = (List<RecipsSteps>) bundle.getSerializable("list");
-        RecipsSteps object = (RecipsSteps) bundle.getSerializable("item");
+        recip = (RecipsSteps) bundle.getSerializable("item");
 
         mDescrption = (TextView) v.findViewById(R.id.item_detail_tv_fulldesc);
         mNext = (Button) v.findViewById(R.id.item_detail_btn_next);
-        mPrevious = (Button) v.findViewById(R.id.item_detail_btn_previous);
         recipImage = (ImageView) v.findViewById(R.id.step_image);
         simpleExoPlayerView = (SimpleExoPlayerView) v.findViewById(R.id.video_display);
 
 
+        mDescrption.setText(recip.getFullDescrptionOfStep());
 
-        //----------------landscape---------
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-
-        if(width>height) {
-            mDescrption.setVisibility(View.INVISIBLE);
-            mNext.setVisibility(View.INVISIBLE);
-            mPrevious.setVisibility(View.INVISIBLE);
-            recipImage.setVisibility(View.INVISIBLE);
-            simpleExoPlayerView.setMinimumWidth(height);
-            simpleExoPlayerView.setMinimumHeight(width);
-
-        }
-            /////////////SAVE DATA
-            try {
-
-
-                for (int j = 0; j < mList.size(); j++) {
-                    object = mList.get(j);
-
-                    ContentValues values = new ContentValues();
-
-                    values.put(RecipsProvider.RECIP_ID, j);
-                    values.put(RecipsProvider.STEP_ID, object.getStepID());
-                    values.put(RecipsProvider.SHORT_DESC, object.getShortDescrptionOfStep());
-                    values.put(RecipsProvider.FULL_DESC, object.getFullDescrptionOfStep());
-                    values.put(RecipsProvider.VIDEO_URL, object.getVideoUrl());
-                    values.put(RecipsProvider.THUMP_URL, object.getThumpUrl());
-
-
-                    //////////
-                    Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-                    int flag = 0;
-                    CR.moveToFirst();
-                    if (CR==null)
-
-                    while ((CR.moveToNext())) {
-                        if (object.getStepID() == CR.getInt(3)) {
-                            flag = 1;
-                        }
-                    }
-                    if (flag == 0) {
-
-                        Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
-                    }
-                }
-
-
-            } catch (Exception e) {
-                String uu = e.toString();
-            }
-
-
-
-        //---------------------------------------------------------------------
+        //----------------------Set Video Url-----------------
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-        initializePlayer(Uri.parse(object.getVideoUrl()));
+        initializePlayer(Uri.parse(recip.getVideoUrl()));
 
-        if (object.getVideoUrl() != "") {
-
+        if (recip.getVideoUrl() != "") {
             simpleExoPlayerView.setVisibility(View.VISIBLE);
-
-
         } else {
             simpleExoPlayerView.setVisibility(View.GONE);
             recipImage.setVisibility(View.GONE);
         }
-
-
 //------------------------------------------------
 
-
-        mDescrption.setText(object.getFullDescrptionOfStep());
-
-        if (object.getThumpUrl().equals("")) {
+        if (recip.getThumpUrl().equals("")) {
         } else {
-            imageUrl = object.getThumpUrl();
+            imageUrl = recip.getThumpUrl();
             recipImage.setVisibility(View.VISIBLE);
             Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
         }
-        flag = object.getStepID();
+        flag = recip.getStepID();
         cursor = flag + 1;
-        int x = cursor;
-        cursor1 = x;
 
         mNext.setOnClickListener(new View.OnClickListener() {
 
@@ -180,23 +104,26 @@ public class StepDetailFragment extends Fragment {
             public void onClick(View v) {
 
                 if (cursor < mList.size()) {
-                    RecipsSteps recip = mList.get(cursor);
+                     recip = mList.get(cursor);
                     mDescrption.setText(recip.getFullDescrptionOfStep());
+
                     if (recip.getThumpUrl().equals("")) {
                     } else {
                         recipImage.setVisibility(View.VISIBLE);
-
                         imageUrl = recip.getThumpUrl();
                         Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
 
                     }
 
                     ///////////////--------VIDEO ------------------
-                    initializePlayer(Uri.parse(recip.getVideoUrl()));
-                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
+                    if (player != null) {
+                        player.stop();
+                        player.release();
+                        player = null;
+                    }
+                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
                     simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-
-
+                    initializePlayer(Uri.parse(recip.getVideoUrl()));
                     if (recip.getVideoUrl() != "") {
                         simpleExoPlayerView.setVisibility(View.VISIBLE);
                     } else {
@@ -208,53 +135,65 @@ public class StepDetailFragment extends Fragment {
                     if (cursor == mList.size()) {
                         cursor = 0;
                     }
-
-                }
-
-
-            }
-        });
-
-        mPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (cursor1 > -1) {
-                    RecipsSteps recip = mList.get(cursor1);
-                    mDescrption.setText(recip.getFullDescrptionOfStep());
-                    if (recip.getThumpUrl().equals("")) {
-
-                    } else {
-                        recipImage.setVisibility(View.VISIBLE);
-
-                        imageUrl = recip.getThumpUrl();
-                        Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
-
-
-                    }
-
-
-                    ///////////////--------VIDEO ------------------
-                    initializePlayer(Uri.parse(recip.getVideoUrl()));
-                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
-                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-
-
-                    if (recip.getVideoUrl() != "") {
-                        simpleExoPlayerView.setVisibility(View.VISIBLE);
-                    } else {
-                        simpleExoPlayerView.setVisibility(View.GONE);
-                        recipImage.setVisibility(View.GONE);
-                    }
-                    //----------------------------------------------
-
-                    cursor--;
-                    if (cursor1 == -1) {
-                        cursor1 = mList.size() - 1;
-                    }
                 }
             }
         });
+        //----------------landscape--------------------------------------
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        if (width > height) {
+            mDescrption.setVisibility(View.INVISIBLE);
+            mNext.setVisibility(View.INVISIBLE);
+            recipImage.setVisibility(View.INVISIBLE);
+            simpleExoPlayerView.setMinimumWidth(height);
+            simpleExoPlayerView.setMinimumHeight(width);
+
+        }
+        //-------------------------------------------------------------------
+
+        /////////////SAVE DATA for widget---------------
+        try {
+
+
+            for (int j = 0; j < mList.size(); j++) {
+                recip = mList.get(j);
+
+                ContentValues values = new ContentValues();
+
+                values.put(RecipsProvider.RECIP_ID, j);
+                values.put(RecipsProvider.STEP_ID, recip.getStepID());
+                values.put(RecipsProvider.SHORT_DESC, recip.getShortDescrptionOfStep());
+                values.put(RecipsProvider.FULL_DESC, recip.getFullDescrptionOfStep());
+                values.put(RecipsProvider.VIDEO_URL, recip.getVideoUrl());
+                values.put(RecipsProvider.THUMP_URL, recip.getThumpUrl());
+
+
+                //////////
+                Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+                int flag = 0;
+                CR.moveToFirst();
+                if (CR == null)
+
+                    while ((CR.moveToNext())) {
+                        if ( recip.getStepID() == CR.getInt(3)) {
+                            flag = 1;
+                        }
+                    }
+                if (flag == 0) {
+
+                    Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
+                }
+            }
+
+
+        } catch (Exception e) {
+            String uu = e.toString();
+        }
+
+        //---------------------------------------------------------------------
 
         return v;
     }
