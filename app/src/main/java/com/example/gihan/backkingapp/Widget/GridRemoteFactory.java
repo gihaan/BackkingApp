@@ -1,7 +1,10 @@
 package com.example.gihan.backkingapp.Widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Parcelable;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -37,9 +40,8 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
-
-        CR.moveToFirst();
         mList.clear();
+        CR.moveToFirst();
         while ((CR.moveToNext())) {
             RecipsSteps ob = new RecipsSteps();
             ob.setStepID(CR.getInt(2));
@@ -69,25 +71,26 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public RemoteViews getViewAt(int position) {
+        RecipsSteps mItem = mList.get(position);
+        RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.recips_widget);
 
-        if(CR==null||CR.getCount()==0)return null;
-        CR.move(position);
+        remoteView.setTextViewText(R.id.widget_recip_step, mItem.getShortDescrptionOfStep());
 
-        RecipsSteps step = new RecipsSteps();
-        step.setStepID(CR.getInt(2));
-        step.setShortDescrptionOfStep(CR.getString(3));
-        step.setFullDescrptionOfStep(CR.getString(4));
-        step.setVideoUrl(CR.getString(5));
-        step.setThumpUrl(CR.getString(6));
+//        Intent intent = new Intent();
+//        intent.putExtra("recipe", mItem);
+//        intent.putExtra("step_id", position);
+//        intent.putExtra("list", (Parcelable) mList);
+//        remoteView.setOnClickFillInIntent(R.id.root, intent);
+//        return remoteView;
+        try{
 
-
-        RemoteViews views=new RemoteViews(mContext.getPackageName(), R.layout.recips_widget);
-        views.setTextViewText(R.id.widget_recip_image,String.valueOf(step.getShortDescrptionOfStep()));
-
-
+        }catch (Exception e){
+            String ff=e.toString();
+        }
 
 
-        return views;
+
+        return remoteView;
 
 
     }

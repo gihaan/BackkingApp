@@ -61,12 +61,14 @@ public class StepDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
+        mList=new ArrayList<>();
+        mList.clear();
         Bundle bundle = getArguments();
         if (bundle == null) {
             bundle = getActivity().getIntent().getExtras();
         }
-        mList = (List<RecipsSteps>) bundle.getSerializable("list");
-        recip = (RecipsSteps) bundle.getSerializable("item");
+        mList = bundle.getParcelableArrayList("list");
+        recip =  bundle.getParcelable("item");
 
         mDescrption = (TextView) v.findViewById(R.id.item_detail_tv_fulldesc);
         mNext = (Button) v.findViewById(R.id.item_detail_btn_next);
@@ -79,9 +81,11 @@ public class StepDetailFragment extends Fragment {
         //----------------------Set Video Url-----------------
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-        initializePlayer(Uri.parse(recip.getVideoUrl()));
+        //initializePlayer(Uri.parse(recip.getVideoUrl()));
 
-        if (recip.getVideoUrl() != "") {
+        String videoUrl=recip.getVideoUrl();
+        if (! videoUrl.equals("")) {
+            initializePlayer(Uri.parse(recip.getVideoUrl()));
             simpleExoPlayerView.setVisibility(View.VISIBLE);
         } else {
             simpleExoPlayerView.setVisibility(View.GONE);
@@ -121,10 +125,11 @@ public class StepDetailFragment extends Fragment {
                         player.release();
                         player = null;
                     }
-                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
-                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-                    initializePlayer(Uri.parse(recip.getVideoUrl()));
-                    if (recip.getVideoUrl() != "") {
+//                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
+//                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+//                    initializePlayer(Uri.parse(recip.getVideoUrl()));
+                    if (!recip.getVideoUrl() .equals("")) {
+                        initializePlayer(Uri.parse(recip.getVideoUrl()));
                         simpleExoPlayerView.setVisibility(View.VISIBLE);
                     } else {
                         simpleExoPlayerView.setVisibility(View.GONE);

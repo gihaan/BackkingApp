@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -93,11 +94,13 @@ public class MainFragment extends Fragment {
             mAdapter.setOnItemClickListener(new RecyclerAdapterItems.OnItemClickListener() {
                 @Override
                 public void onItemClick(View itemView, int position) {
-                    Toast.makeText(getContext(), " was clicked!", Toast.LENGTH_SHORT).show();
 
                     Recips r = mList.get(position);
                     Intent i = new Intent(getContext(), RecipsDetail.class);
-                    i.putExtra("recip", (Serializable) r);
+                    i.putParcelableArrayListExtra("reciprecip", r);
+                    i.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList.get(position).getRecipsSteps());
+
+                    i.putExtra("gerdiant", (Serializable) mList.get(position).getRecipsIngerdiant());
                     startActivity(i);
 
 
@@ -218,13 +221,15 @@ public class MainFragment extends Fragment {
                     //---------------INGERDIANT----------------------
                     // JSONObject recipIngerdiantJson = new JSONObject(recipsJsonSt);
                     JSONArray recipIngerdiantsArray = rec.getJSONArray("ingredients");
+                    ingerdiant.clear();
                     for (int k = 0; k < recipIngerdiantsArray.length(); k++) {
 
 
                         RecipsIngerdiant ob = new RecipsIngerdiant();
                         JSONObject recipIntegr = recipIngerdiantsArray.getJSONObject(k);
 
-                        ob.setIngrediantQuality(recipIntegr.getDouble(QUANTITY));
+                        ob.setIngrediantQuality(recipIntegr.getString(QUANTITY));
+                        String ff=recipIntegr.getString(QUANTITY);
                         ob.setMeaureOfIngerdiant(recipIntegr.getString(MEAURE));
                         ob.setIngerdiantName(recipIntegr.getString(INGERDIANT));
 
@@ -235,6 +240,7 @@ public class MainFragment extends Fragment {
                     //---------------STEPS----------------------
 
                     JSONArray recipStepsArray = rec.getJSONArray("steps");
+                    steps.clear();
                     for (int j = 0; j < recipStepsArray.length(); j++) {
                         RecipsSteps object = new RecipsSteps();
 
@@ -252,8 +258,9 @@ public class MainFragment extends Fragment {
 
                     recips.setRecipsIngerdiant(ingerdiant);
                     recips.setRecipsSteps(steps);
+                    mList.add(i, recips);
 
-                    mList.add(recips);
+
                 }
 
             } catch (Exception e) {

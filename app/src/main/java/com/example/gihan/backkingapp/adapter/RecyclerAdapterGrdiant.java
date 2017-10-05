@@ -45,8 +45,14 @@ public class RecyclerAdapterGrdiant extends RecyclerView.Adapter<RecyclerAdapter
     @Override
     public void onBindViewHolder(RecyclerviewHolder holder, int position) {
 
+        try{
+            String vv=mList.get(position).getIngrediantQuality();
+            holder.mGrdiantQuantity.setText( mList.get(position).getIngrediantQuality());
 
-        holder.mGrdiantQuantity.setText( Double.toString(mList.get(position).getIngrediantQuality()));
+        }catch (Exception e){
+            String dd=e.toString();
+        }
+
         holder.mGrdiantMeaure.setText(mList.get(position).getMeaureOfIngerdiant());
         holder.mGrdiantName.setText(mList.get(position).getIngerdiantName());
 

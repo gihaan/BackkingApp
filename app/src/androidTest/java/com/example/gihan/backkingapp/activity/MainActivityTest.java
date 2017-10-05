@@ -20,7 +20,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -46,16 +49,29 @@ public class MainActivityTest {
                         isDisplayed()));
         textView.check(matches(withText("Baking Time")));
 
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.recycler), isDisplayed()));
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
+
+        ViewInteraction recyclerView2 = onView(
+                allOf(withId(R.id.recycler), isDisplayed()));
+        recyclerView2.perform(actionOnItemAtPosition(0, click()));
+
+        ViewInteraction recyclerView3 = onView(
+                allOf(withId(R.id.recips_detail_recycler_recips), isDisplayed()));
+        recyclerView3.perform(actionOnItemAtPosition(4, click()));
+
+        pressBack();
+
         ViewInteraction textView2 = onView(
-                allOf(withText("Baking Time"),
+                allOf(withId(R.id.step_item_short_desc), withText("Mix cream cheese and dry ingredients."),
                         childAtPosition(
-                                allOf(withId(R.id.backing_time_toolbar),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                                0)),
+                                childAtPosition(
+                                        withId(R.id.recips_detail_recycler_recips),
+                                        2),
                                 0),
                         isDisplayed()));
-        textView2.check(matches(withText("Baking Time")));
+        textView2.check(matches(withText("Mix cream cheese and dry ingredients.")));
 
     }
 

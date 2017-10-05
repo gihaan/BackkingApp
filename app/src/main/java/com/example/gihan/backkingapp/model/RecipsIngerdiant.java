@@ -10,24 +10,24 @@ public class RecipsIngerdiant implements Serializable{
 
 
 
-    private Double ingrediantQuality;
+    private String ingrediantQuality;
     private String meaureOfIngerdiant;
     private String ingerdiantName;
 
     public RecipsIngerdiant() {
     }
 
-    public RecipsIngerdiant(Double ingrediantQuality, String meaureOfIngerdiant, String ingerdiantName) {
+    public RecipsIngerdiant(String  ingrediantQuality, String meaureOfIngerdiant, String ingerdiantName) {
         this.ingrediantQuality = ingrediantQuality;
         this.meaureOfIngerdiant = meaureOfIngerdiant;
         this.ingerdiantName = ingerdiantName;
     }
 
-    public Double getIngrediantQuality() {
+    public String getIngrediantQuality() {
         return ingrediantQuality;
     }
 
-    public void setIngrediantQuality(Double ingrediantQuality) {
+    public void setIngrediantQuality(String  ingrediantQuality) {
         this.ingrediantQuality = ingrediantQuality;
     }
 

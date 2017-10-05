@@ -1,13 +1,17 @@
 package com.example.gihan.backkingapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Gihan on 9/20/2017.
  */
 
-public class Recips  implements Serializable{
+public class Recips extends ArrayList<Parcelable> implements Parcelable{
 
     private int recipsID;
     private String recipsName;
@@ -23,6 +27,24 @@ public class Recips  implements Serializable{
         this.recipsIngerdiant = recipsIngerdiant;
         this.recipsSteps = recipsSteps;
     }
+
+    protected Recips(Parcel in) {
+        recipsID = in.readInt();
+        recipsName = in.readString();
+        recipsSteps = in.createTypedArrayList(RecipsSteps.CREATOR);
+    }
+
+    public static final Creator<Recips> CREATOR = new Creator<Recips>() {
+        @Override
+        public Recips createFromParcel(Parcel in) {
+            return new Recips(in);
+        }
+
+        @Override
+        public Recips[] newArray(int size) {
+            return new Recips[size];
+        }
+    };
 
     public int getRecipsID() {
         return recipsID;
@@ -54,5 +76,17 @@ public class Recips  implements Serializable{
 
     public void setRecipsSteps(List<RecipsSteps> recipsSteps) {
         this.recipsSteps = recipsSteps;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(recipsID);
+        dest.writeString(recipsName);
+        dest.writeTypedList(recipsSteps);
     }
 }
