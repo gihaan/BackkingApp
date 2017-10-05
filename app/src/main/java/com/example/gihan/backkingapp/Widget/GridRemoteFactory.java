@@ -86,12 +86,8 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
         Intent intent = new Intent();
         intent.putExtra("reciprecip", mItem);
-        //  intent.putExtra("step_id", position);
-
         intent.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList);
-      //  views.setOnClickPendingIntent(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
-
-        remoteView.setOnClickFillInIntent(R.id.root, intent);
+        remoteView.setOnClickFillInIntent(R.id.recips_detail, intent);
 
         try {
 
