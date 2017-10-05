@@ -1,5 +1,6 @@
 package com.example.gihan.backkingapp.Widget;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.widget.RemoteViewsService;
 
 import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
+import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 
@@ -24,10 +26,8 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
 
     Context mContext;
-
-    Cursor CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-    List<RecipsSteps> mList = new ArrayList<>();
-
+    Cursor CR;
+    List<RecipsSteps> mList;
 
     public GridRemoteFactory(Context ApplicationContxt) {
         this.mContext = ApplicationContxt;
@@ -40,7 +40,14 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
-        mList.clear();
+
+        try {
+            CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+            mList=new ArrayList<>();
+        } catch (Exception ex) {
+            String ee = ex.toString();
+        }
+
         CR.moveToFirst();
         while ((CR.moveToNext())) {
             RecipsSteps ob = new RecipsSteps();
@@ -62,10 +69,10 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public int getCount() {
-        if(CR==null){
+        if (CR == null) {
             return 0;
-        }else
-           return mList.size();
+        } else
+            return mList.size();
 
     }
 
@@ -75,19 +82,22 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
         RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.recips_widget);
 
         remoteView.setTextViewText(R.id.widget_recip_step, mItem.getShortDescrptionOfStep());
+        remoteView.setTextColor(R.id.widget_recip_step, Color.WHITE);
 
-//        Intent intent = new Intent();
-//        intent.putExtra("recipe", mItem);
-//        intent.putExtra("step_id", position);
-//        intent.putExtra("list", (Parcelable) mList);
-//        remoteView.setOnClickFillInIntent(R.id.root, intent);
-//        return remoteView;
-        try{
+        Intent intent = new Intent();
+        intent.putExtra("reciprecip", mItem);
+        //  intent.putExtra("step_id", position);
 
-        }catch (Exception e){
-            String ff=e.toString();
+        intent.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList);
+      //  views.setOnClickPendingIntent(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
+
+        remoteView.setOnClickFillInIntent(R.id.root, intent);
+
+        try {
+
+        } catch (Exception e) {
+            String ff = e.toString();
         }
-
 
 
         return remoteView;

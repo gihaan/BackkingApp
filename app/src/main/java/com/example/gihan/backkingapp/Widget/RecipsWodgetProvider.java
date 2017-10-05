@@ -27,7 +27,7 @@ public class RecipsWodgetProvider extends AppWidgetProvider {
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recips_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
 
         views.setRemoteAdapter(R.id.widget_grid_view, new Intent(context, igerdiantServies.class));
         views.setPendingIntentTemplate(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
@@ -52,6 +52,7 @@ public class RecipsWodgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
+
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
