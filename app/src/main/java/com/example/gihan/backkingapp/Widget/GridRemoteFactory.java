@@ -13,6 +13,7 @@ import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.model.Recips;
+import com.example.gihan.backkingapp.model.RecipsIngerdiant;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     Context mContext;
     Cursor CR;
-    List<RecipsSteps> mList;
+    List<RecipsIngerdiant> mList;
 
     public GridRemoteFactory(Context ApplicationContxt) {
         this.mContext = ApplicationContxt;
@@ -41,24 +42,24 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     @Override
     public void onDataSetChanged() {
 
-        try {
+
+
+
             CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-            mList=new ArrayList<>();
-        } catch (Exception ex) {
-            String ee = ex.toString();
-        }
+            mList = new ArrayList<>();
 
-        CR.moveToFirst();
-        while ((CR.moveToNext())) {
-            RecipsSteps ob = new RecipsSteps();
-            ob.setStepID(CR.getInt(2));
-            ob.setShortDescrptionOfStep(CR.getString(3));
-            ob.setFullDescrptionOfStep(CR.getString(4));
-            ob.setVideoUrl(CR.getString(5));
-            ob.setThumpUrl(CR.getString(6));
+            CR.moveToFirst();
+            while ((CR.moveToNext())) {
+                RecipsIngerdiant ob = new RecipsIngerdiant();
 
-            mList.add(ob);
-        }
+                ob.setIngrediantQuality(CR.getString(1));
+                ob.setMeaureOfIngerdiant(CR.getString(2));
+                ob.setIngerdiantName(CR.getString(3));
+
+                mList.add(ob);
+            }
+
+
     }
 
     @Override
@@ -78,22 +79,16 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public RemoteViews getViewAt(int position) {
-        RecipsSteps mItem = mList.get(position);
+        RecipsIngerdiant mItem = mList.get(position);
+        String grdiant=mItem.getIngrediantQuality()+"   "+mItem.getIngerdiantName()+"   "+mItem.getMeaureOfIngerdiant();
         RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.recips_widget);
 
-        remoteView.setTextViewText(R.id.widget_recip_step, mItem.getShortDescrptionOfStep());
+        remoteView.setTextViewText(R.id.widget_recip_step, grdiant);
         remoteView.setTextColor(R.id.widget_recip_step, Color.WHITE);
 
         Intent intent = new Intent();
-        intent.putExtra("reciprecip", mItem);
-        intent.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList);
+
         remoteView.setOnClickFillInIntent(R.id.recips_detail, intent);
-
-        try {
-
-        } catch (Exception e) {
-            String ff = e.toString();
-        }
 
 
         return remoteView;
@@ -118,6 +113,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public boolean hasStableIds() {
+
         return true;
     }
 }

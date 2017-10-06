@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,13 +21,18 @@ import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -38,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class StepDetailFragment extends Fragment {
+public class StepDetailFragment extends Fragment implements ExoPlayer.EventListener {
 
     TextView mDescrption;
     Button mNext;
@@ -54,6 +60,7 @@ public class StepDetailFragment extends Fragment {
     int cursor;
 
     String imageUrl;
+    private static long position = 0;
 
 
     @Override
@@ -87,6 +94,13 @@ public class StepDetailFragment extends Fragment {
         if (! videoUrl.equals("")) {
             initializePlayer(Uri.parse(recip.getVideoUrl()));
             simpleExoPlayerView.setVisibility(View.VISIBLE);
+            restExoPlayerAfterRotation(0,false);
+
+            if ((savedInstanceState != null) && savedInstanceState.containsKey("pos")) {
+                position = savedInstanceState.getLong("pos");
+                player.seekTo(position);
+            }
+
         } else {
             simpleExoPlayerView.setVisibility(View.GONE);
             recipImage.setVisibility(View.GONE);
@@ -125,12 +139,11 @@ public class StepDetailFragment extends Fragment {
                         player.release();
                         player = null;
                     }
-//                    simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
-//                    simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-//                    initializePlayer(Uri.parse(recip.getVideoUrl()));
+
                     if (!recip.getVideoUrl() .equals("")) {
                         initializePlayer(Uri.parse(recip.getVideoUrl()));
                         simpleExoPlayerView.setVisibility(View.VISIBLE);
+                        restExoPlayerAfterRotation(0,false);
                     } else {
                         simpleExoPlayerView.setVisibility(View.GONE);
                         recipImage.setVisibility(View.GONE);
@@ -149,58 +162,28 @@ public class StepDetailFragment extends Fragment {
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
+
         if (width > height) {
-            mDescrption.setVisibility(View.INVISIBLE);
-            mNext.setVisibility(View.INVISIBLE);
-            recipImage.setVisibility(View.INVISIBLE);
+            mDescrption.setVisibility(View.GONE);
+            mNext.setVisibility(View.GONE);
+            recipImage.setVisibility(View.GONE);
+
+            simpleExoPlayerView.setMinimumHeight(height);
             simpleExoPlayerView.setMinimumWidth(height);
-            simpleExoPlayerView.setMinimumHeight(width);
+            restExoPlayerAfterRotation(position,true);
 
         }
         //-------------------------------------------------------------------
 
-        /////////////SAVE DATA for widget---------------
-        try {
-
-
-            for (int j = 0; j < mList.size(); j++) {
-                recip = mList.get(j);
-
-                ContentValues values = new ContentValues();
-
-                values.put(RecipsProvider.RECIP_ID, j);
-                values.put(RecipsProvider.STEP_ID, recip.getStepID());
-                values.put(RecipsProvider.SHORT_DESC, recip.getShortDescrptionOfStep());
-                values.put(RecipsProvider.FULL_DESC, recip.getFullDescrptionOfStep());
-                values.put(RecipsProvider.VIDEO_URL, recip.getVideoUrl());
-                values.put(RecipsProvider.THUMP_URL, recip.getThumpUrl());
-
-
-                //////////
-                Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-                int flag = 0;
-                CR.moveToFirst();
-                if (CR == null)
-
-                    while ((CR.moveToNext())) {
-                        if ( recip.getStepID() == CR.getInt(3)) {
-                            flag = 1;
-                        }
-                    }
-                if (flag == 0) {
-
-                    Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
-                }
-            }
-
-
-        } catch (Exception e) {
-            String uu = e.toString();
-        }
-
-        //---------------------------------------------------------------------
-
         return v;
+    }
+
+    private void restExoPlayerAfterRotation(long position, boolean playWhenReady) {
+        this.position = position;
+        if (player != null) {
+            player.seekTo(position);
+            player.setPlayWhenReady(playWhenReady);
+        }
     }
 
 
@@ -240,6 +223,39 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if (playbackState == PlaybackStateCompat.STATE_PLAYING || playbackState == PlaybackStateCompat.STATE_PAUSED) {
+            position = player.getCurrentPosition();
+        }
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity() {
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -258,5 +274,6 @@ public class StepDetailFragment extends Fragment {
         }
 
     }
+
 
 }

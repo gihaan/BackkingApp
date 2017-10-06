@@ -45,21 +45,16 @@ public class RecipsProvider extends ContentProvider {
 
     static final String DATABASE_NAME = "recipapp";
 
-    static final String TABLE_STEP = "step";
+    static final String TABLE_STEP = "gerdiant";
 
 
-    public static final String STEP_ID = "step_id";
-    public static final String RECIP_ID = "recip_id";
-
-    public static final String SHORT_DESC = "short_desc";
-    public static final String FULL_DESC = "full_desc";
-    public static final String VIDEO_URL = "video_url";
-    public static final String THUMP_URL = "thump_url";
+    public static final String Quality = "quality";
+    public static final String MEAURE= "meaure";
+    public static final String NAME = "name";
 
 
     static final int DATABASE_VERSION = 1;
-    public static final String CREATE_STEP = "CREATE TABLE " + TABLE_STEP + "( id INTEGER PRIMARY KEY AUTOINCREMENT ,"+RECIP_ID+" INTEGER," + STEP_ID + " INTEGER, "
-            + SHORT_DESC + " TEXT , " + FULL_DESC + " TEXT," + VIDEO_URL + " TEXT," + THUMP_URL + " TEXT );";
+    public static final String CREATE_STEP = "CREATE TABLE " + TABLE_STEP + "( id INTEGER PRIMARY KEY AUTOINCREMENT , " + Quality + " TEXT," +MEAURE + " TEXT," + NAME + " TEXT );";
 
 
     @Override

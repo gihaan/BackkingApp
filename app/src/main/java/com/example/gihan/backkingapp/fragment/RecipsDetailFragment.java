@@ -1,7 +1,10 @@
 package com.example.gihan.backkingapp.fragment;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -15,20 +18,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.R;
-import com.example.gihan.backkingapp.activity.RecipsDetail;
-import com.example.gihan.backkingapp.activity.StepDetail;
+import com.example.gihan.backkingapp.activity.MainActivity;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterGrdiant;
-import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterRecipsDetail;
 import com.example.gihan.backkingapp.model.NameListener;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.model.RecipsIngerdiant;
 import com.example.gihan.backkingapp.model.RecipsSteps;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class RecipsDetailFragment extends Fragment {
 
@@ -81,6 +83,16 @@ public class RecipsDetailFragment extends Fragment {
 
         mToolbar = (Toolbar) v.findViewById(R.id.detail_backing_time_toolbar);
         mToolbar.setTitle(object.getRecipsName());
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        mToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)      {
+                Intent i =new Intent(getContext(), MainActivity.class);
+                startActivity(i);
+
+            }
+        });
+
 
         mRecipsName = (TextView) v.findViewById(R.id.recips_detail_tv_recip);
         mGrdiant = (TextView) v.findViewById(R.id.recips_detail_tv_grdiant);
@@ -112,6 +124,45 @@ public class RecipsDetailFragment extends Fragment {
             }
         });
 
+
+        /////////////SAVE DATA for widget---------------
+        try {
+
+
+            for (int j = 0; j < mIngrdiant.size(); j++) {
+              RecipsIngerdiant  recip =  mIngrdiant.get(j);
+
+                ContentValues values = new ContentValues();
+
+
+                values.put(RecipsProvider.Quality, recip.getIngrediantQuality());
+                values.put(RecipsProvider.MEAURE, recip.getMeaureOfIngerdiant());
+                values.put(RecipsProvider.NAME, recip.getIngerdiantName());
+
+
+                //////////
+                Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+                int flag = 0;
+                CR.moveToFirst();
+                if (CR == null)
+
+                    while ((CR.moveToNext())) {
+                        if ( recip.getIngerdiantName() == CR.getString(3)) {
+                            flag = 1;
+                        }
+                    }
+                if (flag == 0) {
+
+                    Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
+                }
+            }
+
+
+        } catch (Exception e) {
+            String uu = e.toString();
+        }
+
+        //---------------------------------------------------------------------
 
         return v;
     }

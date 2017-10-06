@@ -14,7 +14,7 @@
     <ImageView
         android:id="@+id/step_image"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:paddingRight="10dp"
@@ -23,7 +23,7 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/video_display"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp">
