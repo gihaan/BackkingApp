@@ -156,11 +156,21 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
                 }
             }
         });
+
+
+        if(savedInstanceState!=null){
+            if (player != null) {
+                player.seekTo(position);
+               player.setPlayWhenReady(true);
+            }
+        }
         //----------------landscape--------------------------------------
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+
+
 
 
         if (width > height) {
@@ -202,6 +212,14 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
         }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (player != null)
+            outState.putLong("pos", player.getCurrentPosition());
     }
 
     @Override
