@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -41,8 +42,11 @@ public class RecipsDetailFragment extends Fragment {
     RecyclerView mRecyclerViewGrdiant;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.LayoutManager mLayout;
+    ScrollView scrollView;
+
     List<RecipsSteps> mSteps = new ArrayList<>();
     List<RecipsIngerdiant> mIngrdiant = new ArrayList<>();
+    public static  int databaseCursor=0;
 
 
     RecyclerAdapterGrdiant mGrdiantAdapter;
@@ -50,6 +54,8 @@ public class RecipsDetailFragment extends Fragment {
     public static final String STEPS = "steps";
     public static final String SAVED_RECYCLER_VIEW_STATUS_ID = "postion";
     public static int lastFirstVisiblePosition;
+
+    public static String recipName;
 
 
     private NameListener mListener;
@@ -63,6 +69,7 @@ public class RecipsDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recips_detail, container, false);
+
 
         Bundle bundle = getArguments();
         if (bundle == null) {
@@ -126,42 +133,47 @@ public class RecipsDetailFragment extends Fragment {
 
 
         /////////////SAVE DATA for widget---------------
-        try {
+        if(databaseCursor==0) {
+            try {
 
 
-            for (int j = 0; j < mIngrdiant.size(); j++) {
-              RecipsIngerdiant  recip =  mIngrdiant.get(j);
+                recipName=object.getRecipsName();
+                for (int j = 0; j < mIngrdiant.size(); j++) {
+                    RecipsIngerdiant recip = mIngrdiant.get(j);
 
-                ContentValues values = new ContentValues();
-
-
-                values.put(RecipsProvider.Quality, recip.getIngrediantQuality());
-                values.put(RecipsProvider.MEAURE, recip.getMeaureOfIngerdiant());
-                values.put(RecipsProvider.NAME, recip.getIngerdiantName());
+                    ContentValues values = new ContentValues();
 
 
-                //////////
-                Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-                int flag = 0;
-                CR.moveToFirst();
-                if (CR == null)
+                    values.put(RecipsProvider.RECIP_NAME, object.getRecipsName());
+                    values.put(RecipsProvider.Quality, recip.getIngrediantQuality());
+                    values.put(RecipsProvider.MEAURE, recip.getMeaureOfIngerdiant());
+                    values.put(RecipsProvider.NAME, recip.getIngerdiantName());
 
-                    while ((CR.moveToNext())) {
-                        if ( recip.getIngerdiantName() == CR.getString(3)) {
-                            flag = 1;
+
+                    //////////
+                    Cursor CR = getContext().getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+                    int flag = 0;
+                    CR.moveToFirst();
+                    if (CR == null)
+
+                        while ((CR.moveToNext())) {
+                            if (recip.getIngerdiantName() == CR.getString(3)) {
+                                flag = 1;
+                            }
                         }
-                    }
-                if (flag == 0) {
+                    if (flag == 0) {
 
-                    Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
+                        Uri uri = getContext().getContentResolver().insert(RecipsProvider.CONTENT_URI, values);
+                    }
                 }
+
+
+            } catch (Exception e) {
+                String uu = e.toString();
             }
 
-
-        } catch (Exception e) {
-            String uu = e.toString();
+            databaseCursor=1;
         }
-
         //---------------------------------------------------------------------
 
         return v;

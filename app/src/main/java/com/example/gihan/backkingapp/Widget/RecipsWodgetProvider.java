@@ -12,6 +12,7 @@ import com.example.gihan.backkingapp.R;
 import com.example.gihan.backkingapp.activity.MainActivity;
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.activity.StepDetail;
+import com.example.gihan.backkingapp.fragment.RecipsDetailFragment;
 
 /**
  * Implementation of App Widget functionality.
@@ -32,6 +33,7 @@ public class RecipsWodgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.widget_grid_view, new Intent(context, igerdiantServies.class));
         views.setPendingIntentTemplate(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
 
+        views.setTextViewText(R.id.widget_recip_name, RecipsDetailFragment.recipName);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

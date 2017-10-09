@@ -29,6 +29,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     Context mContext;
     Cursor CR;
     List<RecipsIngerdiant> mList;
+    public static String recipName;
 
     public GridRemoteFactory(Context ApplicationContxt) {
         this.mContext = ApplicationContxt;
@@ -52,9 +53,10 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
             while ((CR.moveToNext())) {
                 RecipsIngerdiant ob = new RecipsIngerdiant();
 
-                ob.setIngrediantQuality(CR.getString(1));
-                ob.setMeaureOfIngerdiant(CR.getString(2));
-                ob.setIngerdiantName(CR.getString(3));
+                recipName=CR.getString(1);
+                ob.setIngrediantQuality(CR.getString(2));
+                ob.setMeaureOfIngerdiant(CR.getString(3));
+                ob.setIngerdiantName(CR.getString(4));
 
                 mList.add(ob);
             }
@@ -86,10 +88,12 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
         remoteView.setTextViewText(R.id.widget_recip_step, grdiant);
         remoteView.setTextColor(R.id.widget_recip_step, Color.WHITE);
 
+
         Intent intent = new Intent();
 
         remoteView.setOnClickFillInIntent(R.id.recips_detail, intent);
 
+        remoteView.setTextViewText(R.id.widget_recip_name,GridRemoteFactory.recipName);
 
         return remoteView;
 

@@ -47,14 +47,14 @@ public class RecipsProvider extends ContentProvider {
 
     static final String TABLE_STEP = "gerdiant";
 
-
+    public static final String RECIP_NAME = "recipname";
     public static final String Quality = "quality";
     public static final String MEAURE= "meaure";
     public static final String NAME = "name";
 
 
     static final int DATABASE_VERSION = 1;
-    public static final String CREATE_STEP = "CREATE TABLE " + TABLE_STEP + "( id INTEGER PRIMARY KEY AUTOINCREMENT , " + Quality + " TEXT," +MEAURE + " TEXT," + NAME + " TEXT );";
+    public static final String CREATE_STEP = "CREATE TABLE " + TABLE_STEP + "( id INTEGER PRIMARY KEY AUTOINCREMENT , "+RECIP_NAME+" TEXT , " + Quality + " TEXT," +MEAURE + " TEXT," + NAME + " TEXT );";
 
 
     @Override

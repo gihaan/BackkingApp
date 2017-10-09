@@ -14,6 +14,7 @@ import com.example.gihan.backkingapp.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,17 +39,18 @@ public class MainActivityTest {
     public void mainActivityTest() {
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.recycler), isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        recyclerView.perform(actionOnItemAtPosition(2, click()));
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.step_item_short_desc), withText("Pour batter in pan."),
+                allOf(withText("Yellow Cake"),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.recips_detail_recycler_recips),
-                                        2),
-                                0),
+                                allOf(withId(R.id.detail_backing_time_toolbar),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                                0)),
+                                1),
                         isDisplayed()));
-        textView.check(matches(withText("Pour batter in pan.")));
+        textView.check(matches(withText("Yellow Cake")));
 
     }
 
