@@ -7,12 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.model.Recips;
 import com.example.gihan.backkingapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +49,12 @@ public class RecyclerAdapterItems extends RecyclerView.Adapter<RecyclerAdapterIt
 
         Recips object = mList.get(position);
         holder.mRecipNmae.setText(mList.get(position).getRecipsName());
+        holder.mRecipVersion.setText(mList.get(position).getServing());
+        if(!mList.get(position).getImage().equals("")){
+            Picasso.with(ctx).load(mList.get(position).getImage()).into(holder.mRecipImage);
+
+
+        }
 
            }
 
@@ -76,6 +84,8 @@ public class RecyclerAdapterItems extends RecyclerView.Adapter<RecyclerAdapterIt
     public static class RecyclerviewHolder extends RecyclerView.ViewHolder {
 
        private TextView mRecipNmae;
+        private TextView mRecipVersion;
+        private ImageView mRecipImage;
         private List<Recips> mList = new ArrayList<>();
         private Context ctx;
 
@@ -84,6 +94,8 @@ public class RecyclerAdapterItems extends RecyclerView.Adapter<RecyclerAdapterIt
             this.ctx = ctx;
 
             mRecipNmae = (TextView) view.findViewById(R.id.recip_name);
+            mRecipVersion=(TextView)view.findViewById(R.id.recip_version);
+            mRecipImage=(ImageView)view.findViewById(R.id.recip_image);
 
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {

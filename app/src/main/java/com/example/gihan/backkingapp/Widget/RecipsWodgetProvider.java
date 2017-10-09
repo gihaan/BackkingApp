@@ -33,7 +33,7 @@ public class RecipsWodgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.widget_grid_view, new Intent(context, igerdiantServies.class));
         views.setPendingIntentTemplate(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
 
-        views.setTextViewText(R.id.widget_recip_name, RecipsDetailFragment.recipName);
+        views.setTextViewText(R.id.widget_recip_name, "Nutella Pie");
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

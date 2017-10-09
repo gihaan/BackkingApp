@@ -17,21 +17,20 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
     private String recipsName;
     private List<RecipsIngerdiant>recipsIngerdiant;
     private List<RecipsSteps>recipsSteps;
+    private String serving;
+    private String image;
+
 
     public Recips() {
     }
 
-    public Recips(int recipsID, String recipsName, List<RecipsIngerdiant> recipsIngerdiant, List<RecipsSteps> recipsSteps) {
-        this.recipsID = recipsID;
-        this.recipsName = recipsName;
-        this.recipsIngerdiant = recipsIngerdiant;
-        this.recipsSteps = recipsSteps;
-    }
 
     protected Recips(Parcel in) {
         recipsID = in.readInt();
         recipsName = in.readString();
         recipsSteps = in.createTypedArrayList(RecipsSteps.CREATOR);
+        serving = in.readString();
+        image = in.readString();
     }
 
     public static final Creator<Recips> CREATOR = new Creator<Recips>() {
@@ -45,6 +44,26 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
             return new Recips[size];
         }
     };
+
+    public String getServing() {
+        return serving;
+    }
+
+    public void setServing(String serving) {
+        this.serving = serving;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public static Creator<Recips> getCREATOR() {
+        return CREATOR;
+    }
 
     public int getRecipsID() {
         return recipsID;
@@ -70,6 +89,7 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
         this.recipsIngerdiant = recipsIngerdiant;
     }
 
+
     public List<RecipsSteps> getRecipsSteps() {
         return recipsSteps;
     }
@@ -77,6 +97,7 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
     public void setRecipsSteps(List<RecipsSteps> recipsSteps) {
         this.recipsSteps = recipsSteps;
     }
+
 
     @Override
     public int describeContents() {
@@ -88,5 +109,7 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
         dest.writeInt(recipsID);
         dest.writeString(recipsName);
         dest.writeTypedList(recipsSteps);
+        dest.writeString(serving);
+        dest.writeString(image);
     }
 }

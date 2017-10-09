@@ -46,7 +46,6 @@ public class RecipsDetailFragment extends Fragment {
 
     List<RecipsSteps> mSteps = new ArrayList<>();
     List<RecipsIngerdiant> mIngrdiant = new ArrayList<>();
-    public static  int databaseCursor=0;
 
 
     RecyclerAdapterGrdiant mGrdiantAdapter;
@@ -133,7 +132,7 @@ public class RecipsDetailFragment extends Fragment {
 
 
         /////////////SAVE DATA for widget---------------
-        if(databaseCursor==0) {
+        if(object.getRecipsID()==1) {
             try {
 
 
@@ -172,7 +171,7 @@ public class RecipsDetailFragment extends Fragment {
                 String uu = e.toString();
             }
 
-            databaseCursor=1;
+
         }
         //---------------------------------------------------------------------
 

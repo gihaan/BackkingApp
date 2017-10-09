@@ -186,6 +186,8 @@ public class MainFragment extends Fragment {
             //---------DATA FOR RECIPS----------------------
             final String RECIP_ID = "id";
             final String NAME = "name";
+            final String SERVINGS="servings";
+            final String IMAGE="image";
             final String RECIPS_INGERDIANT = "ingredients";
             final String RECIPS_STEPS = "steps";
 
@@ -216,6 +218,7 @@ public class MainFragment extends Fragment {
                     Recips recips = new Recips();
                     recips.setRecipsID(rec.getInt(RECIP_ID));
                     recips.setRecipsName(rec.getString(NAME));
+
 
 
                     //---------------INGERDIANT----------------------
@@ -258,6 +261,9 @@ public class MainFragment extends Fragment {
 
                     recips.setRecipsIngerdiant(ingerdiant);
                     recips.setRecipsSteps(steps);
+                    recips.setServing(rec.getString(SERVINGS));
+                    recips.setImage(rec.getString(IMAGE));
+
                     mList.add(i, recips);
 
 
