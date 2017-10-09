@@ -49,6 +49,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
             CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
             mList = new ArrayList<>();
 
+        mList.clear();
             CR.moveToFirst();
             while ((CR.moveToNext())) {
                 RecipsIngerdiant ob = new RecipsIngerdiant();

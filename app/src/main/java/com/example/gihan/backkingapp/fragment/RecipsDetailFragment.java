@@ -156,7 +156,7 @@ public class RecipsDetailFragment extends Fragment {
                     if (CR == null)
 
                         while ((CR.moveToNext())) {
-                            if (recip.getIngerdiantName() == CR.getString(3)) {
+                            if (recip.getIngerdiantName() == CR.getString(4)) {
                                 flag = 1;
                             }
                         }
