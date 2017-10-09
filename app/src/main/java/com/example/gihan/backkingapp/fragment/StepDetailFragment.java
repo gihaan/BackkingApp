@@ -53,12 +53,9 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
     private SimpleExoPlayer player;
     private RecipsSteps recip;
 
-    LoadControl loadControl;
-
-    List<RecipsSteps> mList ;
+    List<RecipsSteps> mList;
     int flag;
     int cursor;
-
     String imageUrl;
     private static long position = 0;
 
@@ -68,14 +65,14 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
-        mList=new ArrayList<>();
+        mList = new ArrayList<>();
         mList.clear();
         Bundle bundle = getArguments();
         if (bundle == null) {
             bundle = getActivity().getIntent().getExtras();
         }
         mList = bundle.getParcelableArrayList("list");
-        recip =  bundle.getParcelable("item");
+        recip = bundle.getParcelable("item");
 
         mDescrption = (TextView) v.findViewById(R.id.item_detail_tv_fulldesc);
         mNext = (Button) v.findViewById(R.id.item_detail_btn_next);
@@ -85,16 +82,22 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
         mDescrption.setText(recip.getFullDescrptionOfStep());
 
+        //-------------IMAGE-----------------------------------
+        if (!recip.getThumpUrl().equals("")) {
+            imageUrl = recip.getThumpUrl();
+            Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
+        } else {
+              recipImage.setVisibility(View.GONE);
+        }
         //----------------------Set Video Url-----------------
-        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.gigi));
+        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-        //initializePlayer(Uri.parse(recip.getVideoUrl()));
 
-        String videoUrl=recip.getVideoUrl();
-        if (! videoUrl.equals("")) {
+        String videoUrl = recip.getVideoUrl();
+        if (!videoUrl.equals("")) {
             initializePlayer(Uri.parse(recip.getVideoUrl()));
             simpleExoPlayerView.setVisibility(View.VISIBLE);
-            restExoPlayerAfterRotation(0,false);
+            restExoPlayerAfterRotation(0, false);
 
             if ((savedInstanceState != null) && savedInstanceState.containsKey("pos")) {
                 position = savedInstanceState.getLong("pos");
@@ -103,16 +106,8 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
         } else {
             simpleExoPlayerView.setVisibility(View.GONE);
-            recipImage.setVisibility(View.GONE);
         }
-//------------------------------------------------
 
-        if (recip.getThumpUrl().equals("")) {
-        } else {
-            imageUrl = recip.getThumpUrl();
-            recipImage.setVisibility(View.VISIBLE);
-            Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
-        }
         flag = recip.getStepID();
         cursor = flag + 1;
 
@@ -122,14 +117,16 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
             public void onClick(View v) {
 
                 if (cursor < mList.size()) {
-                     recip = mList.get(cursor);
+                    recip = mList.get(cursor);
                     mDescrption.setText(recip.getFullDescrptionOfStep());
 
-                    if (recip.getThumpUrl().equals("")) {
-                    } else {
+                    if (!recip.getThumpUrl().equals("")) {
                         recipImage.setVisibility(View.VISIBLE);
                         imageUrl = recip.getThumpUrl();
-                        Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
+                        Picasso.with(getContext()).load(recip.getThumpUrl()).placeholder(R.drawable.gigi).into(recipImage);
+
+                    } else {
+                        recipImage.setVisibility(View.GONE);
 
                     }
 
@@ -140,13 +137,13 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
                         player = null;
                     }
 
-                    if (!recip.getVideoUrl() .equals("")) {
+                    if (!recip.getVideoUrl().equals("")) {
                         initializePlayer(Uri.parse(recip.getVideoUrl()));
                         simpleExoPlayerView.setVisibility(View.VISIBLE);
-                        restExoPlayerAfterRotation(0,false);
+                        restExoPlayerAfterRotation(0, false);
                     } else {
                         simpleExoPlayerView.setVisibility(View.GONE);
-                        recipImage.setVisibility(View.GONE);
+
                     }
                     //----------------------------------------------
                     cursor++;
@@ -158,10 +155,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         });
 
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             if (player != null) {
                 player.seekTo(position);
-               player.setPlayWhenReady(true);
+                player.setPlayWhenReady(true);
             }
         }
         //----------------landscape--------------------------------------
@@ -171,8 +168,6 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
         int width = displayMetrics.widthPixels;
 
 
-
-
         if (width > height) {
             mDescrption.setVisibility(View.GONE);
             mNext.setVisibility(View.GONE);
@@ -180,7 +175,7 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
             simpleExoPlayerView.setMinimumHeight(height);
             simpleExoPlayerView.setMinimumWidth(height);
-            restExoPlayerAfterRotation(position,true);
+            restExoPlayerAfterRotation(position, true);
 
         }
         //-------------------------------------------------------------------

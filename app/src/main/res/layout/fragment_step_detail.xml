@@ -7,18 +7,17 @@
     tools:context="com.example.gihan.backkingapp.fragment.StepDetailFragment">
 
 
-    <!--<include-->
-    <!--android:id="@+id/item_detail_toolbar"-->
-    <!--layout="@layout/tool_bar_layout" />-->
+
 
     <ImageView
         android:id="@+id/step_image"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:paddingRight="10dp"
-        android:visibility="gone" />
+        android:src="@drawable/example_appwidget_preview"
+   />
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/video_display"
