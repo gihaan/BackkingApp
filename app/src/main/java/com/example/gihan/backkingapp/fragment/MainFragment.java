@@ -88,12 +88,14 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Recips> recipses) {
+
             mAdapter = new RecyclerAdapterItems(mList, getContext());
             mRecyclerView.setAdapter(mAdapter);
 
             mAdapter.setOnItemClickListener(new RecyclerAdapterItems.OnItemClickListener() {
                 @Override
                 public void onItemClick(View itemView, int position) {
+
 
                     Recips r = mList.get(position);
                     Intent i = new Intent(getContext(), RecipsDetail.class);
@@ -144,6 +146,7 @@ public class MainFragment extends Fragment {
                 }
                 recipJsonSt = buffer.toString();
                 try {
+                    mList.clear();
                     return getRecipsFromString(recipJsonSt);
 
 

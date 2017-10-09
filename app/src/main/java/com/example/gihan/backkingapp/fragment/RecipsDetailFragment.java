@@ -42,10 +42,9 @@ public class RecipsDetailFragment extends Fragment {
     RecyclerView mRecyclerViewGrdiant;
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.LayoutManager mLayout;
-    ScrollView scrollView;
 
-    List<RecipsSteps> mSteps = new ArrayList<>();
-    List<RecipsIngerdiant> mIngrdiant = new ArrayList<>();
+    List<RecipsSteps> mSteps =new ArrayList<>();
+    List<RecipsIngerdiant> mIngrdiant=new ArrayList<>() ;
 
 
     RecyclerAdapterGrdiant mGrdiantAdapter;
@@ -54,7 +53,7 @@ public class RecipsDetailFragment extends Fragment {
     public static final String SAVED_RECYCLER_VIEW_STATUS_ID = "postion";
     public static int lastFirstVisiblePosition;
 
-    public static String recipName;
+    public static String recipNamee;
 
 
     private NameListener mListener;
@@ -69,6 +68,8 @@ public class RecipsDetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recips_detail, container, false);
 
+        mSteps.clear();
+        mIngrdiant.clear();
 
         Bundle bundle = getArguments();
         if (bundle == null) {
@@ -136,7 +137,7 @@ public class RecipsDetailFragment extends Fragment {
             try {
 
 
-                recipName=object.getRecipsName();
+                recipNamee=object.getRecipsName();
                 for (int j = 0; j < mIngrdiant.size(); j++) {
                     RecipsIngerdiant recip = mIngrdiant.get(j);
 

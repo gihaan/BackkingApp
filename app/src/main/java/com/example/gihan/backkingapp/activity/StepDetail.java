@@ -11,23 +11,6 @@ public class StepDetail extends AppCompatActivity {
 
 
 
-    /*
-
-
-        Intent sentIntent=getIntent();
-        Bundle sentBundle=sentIntent.getExtras();
-
-        MovieDetailFragment mDetailFragment=new MovieDetailFragment();
-        mDetailFragment.setArguments(sentBundle);
-
-        if(savedInstanceState==null)
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fldetail, new MovieDetailFragment())
-                    .commit();
-
-
-
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +25,7 @@ public class StepDetail extends AppCompatActivity {
 
         if(savedInstanceState==null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detil, new StepDetailFragment())
+                    .replace(R.id.item_detil, new StepDetailFragment())
                     .commit();
 
 
