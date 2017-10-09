@@ -84,10 +84,13 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
 
         //-------------IMAGE-----------------------------------
         if (!recip.getThumpUrl().equals("")) {
+
             imageUrl = recip.getThumpUrl();
             Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.gigi).into(recipImage);
         } else {
-              recipImage.setVisibility(View.GONE);
+            Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.example_appwidget_preview).into(recipImage);
+
+          //  recipImage.setVisibility(View.GONE);
         }
         //----------------------Set Video Url-----------------
         simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.widget));
@@ -126,7 +129,10 @@ public class StepDetailFragment extends Fragment implements ExoPlayer.EventListe
                         Picasso.with(getContext()).load(recip.getThumpUrl()).placeholder(R.drawable.gigi).into(recipImage);
 
                     } else {
-                        recipImage.setVisibility(View.GONE);
+
+                        Picasso.with(getContext()).load(imageUrl).placeholder(R.drawable.example_appwidget_preview).into(recipImage);
+
+                      //  recipImage.setVisibility(View.GONE);
 
                     }
 
