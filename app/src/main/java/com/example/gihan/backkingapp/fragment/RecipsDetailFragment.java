@@ -133,7 +133,7 @@ public class RecipsDetailFragment extends Fragment {
 
 
         /////////////SAVE DATA for widget---------------
-        if(object.getRecipsID()==1) {
+        if(object.getRecipsID()==2) {
             try {
 
 
