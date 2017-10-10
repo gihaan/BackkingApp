@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(TABLET_MODE==0){
-            getSupportFragmentManager().beginTransaction().add(R.id.main_activity,new MainFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_activity,new MainFragment()).commit();
 
         }else {
-            getSupportFragmentManager().beginTransaction().add(R.id.main_activity_tablet,new MainFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_tablet,new MainFragment()).commit();
 
         }
     }
