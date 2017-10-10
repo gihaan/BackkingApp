@@ -2,9 +2,11 @@ package com.example.gihan.backkingapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,6 +26,25 @@ public class Recips extends ArrayList<Parcelable> implements Parcelable{
     public Recips() {
     }
 
+
+    public Recips(int recipsID, String recipsName, List<RecipsIngerdiant> recipsIngerdiant, List<RecipsSteps> recipsSteps, String serving, String image) {
+        this.recipsID = recipsID;
+        this.recipsName = recipsName;
+        this.recipsIngerdiant = recipsIngerdiant;
+        this.recipsSteps = recipsSteps;
+        this.serving = serving;
+        this.image = image;
+    }
+
+    public Recips(@NonNull Collection<? extends Parcelable> c, int recipsID, String recipsName, List<RecipsIngerdiant> recipsIngerdiant, List<RecipsSteps> recipsSteps, String serving, String image) {
+        super(c);
+        this.recipsID = recipsID;
+        this.recipsName = recipsName;
+        this.recipsIngerdiant = recipsIngerdiant;
+        this.recipsSteps = recipsSteps;
+        this.serving = serving;
+        this.image = image;
+    }
 
     protected Recips(Parcel in) {
         recipsID = in.readInt();

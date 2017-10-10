@@ -18,6 +18,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.gihan.backkingapp.ContentProvider.RecipsProvider;
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.adapter.RecyclerAdapterItems;
@@ -75,11 +80,106 @@ public class MainFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        GetDataFromJson ob = new GetDataFromJson();
-        ob.execute();
+//        GetDataFromJson ob = new GetDataFromJson();
+//        ob.execute();
+        getDataFromJson();
 
 
         return v;
+    }
+
+
+    public void getDataFromJson() {
+
+        String jsonUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(jsonUrl, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray ing = jsonObject.getJSONArray("ingredients");
+                        List<RecipsIngerdiant> recipeIngredients = new ArrayList<>();
+                        List<RecipsSteps> recipeStepses = new ArrayList<>();
+                        for (int j = 0; j < ing.length(); j++) {
+
+                            JSONObject jsonObject1 = ing.getJSONObject(j);
+                            Log.e("INGREDIENT", jsonObject1.toString());
+                            RecipsIngerdiant recipeIngredient =
+                                    new RecipsIngerdiant(
+                                            jsonObject1.getString("quantity"),
+                                            jsonObject1.getString("measure"),
+                                            jsonObject1.getString("ingredient")
+                                    );
+
+                            recipeIngredients.add(recipeIngredient);
+
+                        }
+                        JSONArray sts = jsonObject.getJSONArray("steps");
+                        for (int k = 0; k < sts.length(); k++) {
+                            JSONObject jsonObject1 = sts.getJSONObject(k);
+                            RecipsSteps recipeSteps = new RecipsSteps(
+                                    jsonObject1.getInt("id"),
+                                    jsonObject1.getString("shortDescription"),
+                                    jsonObject1.getString("description"),
+                                    jsonObject1.getString("videoURL"),
+                                    jsonObject1.getString("thumbnailURL"));
+                            recipeStepses.add(recipeSteps);
+
+                        }
+
+                        Recips recipeData = new Recips
+                                (jsonObject.getInt("id"),
+                                        jsonObject.getString("name"),
+                                        recipeIngredients,
+                                        recipeStepses,
+                                        jsonObject.getString("servings"),
+                                        jsonObject.getString("image")
+
+                                );
+                        mList.add(recipeData);
+                        mAdapter = new RecyclerAdapterItems(mList, getContext());
+                        mRecyclerView.setAdapter(mAdapter);
+
+                        mAdapter.setOnItemClickListener(new RecyclerAdapterItems.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View itemView, int position) {
+
+                                 Recips r = mList.get(position);
+                                Intent i = new Intent(getContext(), RecipsDetail.class);
+                                i.putParcelableArrayListExtra("reciprecip", mList.get(position));
+
+                    i.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList.get(position).getRecipsSteps());
+                    i.putExtra("gerdiant", (Serializable) mList.get(position).getRecipsIngerdiant());
+                                startActivity(i);
+
+
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d("ERRod", error.getMessage());
+
+                    }
+                });
+
+
+        Volley.newRequestQueue(getContext()).add(jsonArrayRequest);
+
+
     }
 
 
@@ -96,13 +196,12 @@ public class MainFragment extends Fragment {
                 @Override
                 public void onItemClick(View itemView, int position) {
 
-
-                    Recips r = mList.get(position);
+                    // Recips r = mList.get(position);
                     Intent i = new Intent(getContext(), RecipsDetail.class);
-                    i.putParcelableArrayListExtra("reciprecip", r);
-                    i.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList.get(position).getRecipsSteps());
+                    i.putParcelableArrayListExtra("reciprecip", mList.get(position));
 
-                    i.putExtra("gerdiant", (Serializable) mList.get(position).getRecipsIngerdiant());
+//                    i.putParcelableArrayListExtra("step", (ArrayList<? extends Parcelable>) mList.get(position).getRecipsSteps());
+//                    i.putExtra("gerdiant", (Serializable) mList.get(position).getRecipsIngerdiant());
                     startActivity(i);
 
 
@@ -189,8 +288,8 @@ public class MainFragment extends Fragment {
             //---------DATA FOR RECIPS----------------------
             final String RECIP_ID = "id";
             final String NAME = "name";
-            final String SERVINGS="servings";
-            final String IMAGE="image";
+            final String SERVINGS = "servings";
+            final String IMAGE = "image";
             final String RECIPS_INGERDIANT = "ingredients";
             final String RECIPS_STEPS = "steps";
 
@@ -223,7 +322,6 @@ public class MainFragment extends Fragment {
                     recips.setRecipsName(rec.getString(NAME));
 
 
-
                     //---------------INGERDIANT----------------------
                     // JSONObject recipIngerdiantJson = new JSONObject(recipsJsonSt);
                     JSONArray recipIngerdiantsArray = rec.getJSONArray("ingredients");
@@ -235,7 +333,7 @@ public class MainFragment extends Fragment {
                         JSONObject recipIntegr = recipIngerdiantsArray.getJSONObject(k);
 
                         ob.setIngrediantQuality(recipIntegr.getString(QUANTITY));
-                        String ff=recipIntegr.getString(QUANTITY);
+                        String ff = recipIntegr.getString(QUANTITY);
                         ob.setMeaureOfIngerdiant(recipIntegr.getString(MEAURE));
                         ob.setIngerdiantName(recipIntegr.getString(INGERDIANT));
 
