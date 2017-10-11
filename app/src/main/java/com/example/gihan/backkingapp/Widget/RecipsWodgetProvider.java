@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.widget.RemoteViews;
 
 import com.example.gihan.backkingapp.R;
@@ -13,6 +14,8 @@ import com.example.gihan.backkingapp.activity.MainActivity;
 import com.example.gihan.backkingapp.activity.RecipsDetail;
 import com.example.gihan.backkingapp.activity.StepDetail;
 import com.example.gihan.backkingapp.fragment.RecipsDetailFragment;
+
+import static com.example.gihan.backkingapp.Widget.GridRemoteFactory.recipName;
 
 /**
  * Implementation of App Widget functionality.
@@ -33,7 +36,10 @@ public class RecipsWodgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.widget_grid_view, new Intent(context, igerdiantServies.class));
         views.setPendingIntentTemplate(R.id.widget_grid_view, PendingIntent.getActivity(context, 0, new Intent(context, RecipsDetail.class), 0));
 
-        views.setTextViewText(R.id.widget_recip_name,RecipsDetailFragment.recipNamee);
+        views.setTextViewText(R.id.widget_recip_name,recipName);
+        views.setTextColor(R.id.widget_recip_name,Color.BLACK);
+
+
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

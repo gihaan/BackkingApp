@@ -19,6 +19,8 @@ import com.example.gihan.backkingapp.model.RecipsSteps;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.gihan.backkingapp.fragment.RecipsDetailFragment.recipNamee;
+
 /**
  * Created by Gihan on 9/29/2017.
  */
@@ -44,23 +46,30 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     public void onDataSetChanged() {
 
 
-
-
-            CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
-            mList = new ArrayList<>();
+        CR = mContext.getContentResolver().query(RecipsProvider.CONTENT_URI, null, null, null, null);
+        mList = new ArrayList<>();
 
         mList.clear();
-            CR.moveToFirst();
-            while ((CR.moveToNext())) {
-                RecipsIngerdiant ob = new RecipsIngerdiant();
+        CR.moveToFirst();
+        while ((CR.moveToNext())) {
+            if(recipNamee.equals("")){
+                recipNamee="Nutella Pie";
+            }
 
-                recipName=CR.getString(1);
+            RecipsIngerdiant ob = new RecipsIngerdiant();
+
+            recipName = CR.getString(1);
+           if (recipName.equals(recipNamee)) {
+
                 ob.setIngrediantQuality(CR.getString(2));
                 ob.setMeaureOfIngerdiant(CR.getString(3));
                 ob.setIngerdiantName(CR.getString(4));
 
                 mList.add(ob);
-            }
+
+           }
+
+        }
 
 
     }
@@ -83,7 +92,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
     @Override
     public RemoteViews getViewAt(int position) {
         RecipsIngerdiant mItem = mList.get(position);
-        String grdiant=mItem.getIngrediantQuality()+"   "+mItem.getIngerdiantName()+"   "+mItem.getMeaureOfIngerdiant();
+        String grdiant =mItem.getIngerdiantName() + "            " +mItem.getIngrediantQuality() + "   " + mItem.getMeaureOfIngerdiant();
         RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.recips_widget);
 
         remoteView.setTextViewText(R.id.widget_recip_step, grdiant);
@@ -94,7 +103,7 @@ public class GridRemoteFactory implements RemoteViewsService.RemoteViewsFactory 
 
         remoteView.setOnClickFillInIntent(R.id.recips_detail, intent);
 
-        remoteView.setTextViewText(R.id.widget_recip_name,GridRemoteFactory.recipName);
+        remoteView.setTextViewText(R.id.widget_recip_name, GridRemoteFactory.recipName);
 
         return remoteView;
 

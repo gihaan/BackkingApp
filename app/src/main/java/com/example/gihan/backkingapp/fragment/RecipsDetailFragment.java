@@ -133,17 +133,12 @@ public class RecipsDetailFragment extends Fragment {
 
 
         /////////////SAVE DATA for widget---------------
-        if(object.getRecipsID()==2) {
             try {
-
-
                 recipNamee=object.getRecipsName();
                 for (int j = 0; j < mIngrdiant.size(); j++) {
                     RecipsIngerdiant recip = mIngrdiant.get(j);
 
                     ContentValues values = new ContentValues();
-
-
                     values.put(RecipsProvider.RECIP_NAME, object.getRecipsName());
                     values.put(RecipsProvider.Quality, recip.getIngrediantQuality());
                     values.put(RecipsProvider.MEAURE, recip.getMeaureOfIngerdiant());
@@ -173,7 +168,7 @@ public class RecipsDetailFragment extends Fragment {
             }
 
 
-        }
+
         //---------------------------------------------------------------------
 
         return v;
